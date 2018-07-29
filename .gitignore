@@ -328,3 +328,8 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+/documentation/Care Team Control Functional Document.docx
+/documentation/Codeable Concept Type List v1.6.xlsx
+/documentation/FHIR_Entities_Metadata_List.xlsx
+/documentation/Timeline Control Functional Documentation.docx
+/utilities/loadcodes/Bulkload Codes for the HL7 FHIR Accelerator Codeable Concepts.docx
