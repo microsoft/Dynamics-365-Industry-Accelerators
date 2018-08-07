@@ -1,30 +1,53 @@
+# Microsoft Dynamics 365 Announces Industry Accelerators
 
-# Microsoft Dynamics 365 Health Accelerator
+Dynamics 365 announced the Microsoft Power Platform, a connected app platform 
+that unifies access to your data to enable ISVs, SIs, Partners and Customers to build intelligent, 
+data driven, task focused business and analytic applications. Microsoft is focused on enabling a data 
+culture where the Microsoft Power Platform acts as the glue across Dynamics 365 (CE, F&O, Talent), 
+Office 365 (SharePoint, Teams), Power BI, Power Apps, Microsoft Flow, Azure and other 3rd party on-premise 
+and cloud based solutions.
 
-This repository represents the artifacts related to the Health Accelerator. The Health Accelerator represents a FHIR HL7 standard CDS data model, sample apps, forms, views and other Customer Engagement collateral. Here you will be able to download and leverage the following:
+# Introducing
 
-# Documentation
+With the Power Platform providing a unified approach to building data driven solutions, the team is taking 
+it one step further by introducing Industry Solution Accelerators. Accelerators are industry focused foundational 
+components that enable ISVs and other solution providers, a way to build solutions that are based on industry 
+standards supported and driven by Microsoft. Along with our Health Accelerator that was released during Inspire 2018, 
+which you can read about here, we are focused on delivering accelerators for the following industries (but not limited too):
 
-The documentation covers user guides, how to's, sample data descriptions, entity mapping data, attribute descriptions etc.
+Automotive (Manufacturing)
+EDU (Higher Ed / K-12)
+Retail
+Financial Services (Credit Union, Banking, Wealth Management)
+Not for Profit
+Health
+And others
 
-# Samplecode
+Industry Solution Accelerators enable you to build solutions on the Microsoft Power Platform that connect to your 
+existing 3rd party applications, embed new applications on Dynamics 365 and extend existing first party application, 
+such as Sales, Service and Marketing. Resources have been allocated across Microsoft Product Groups, Field, Sales, Marketing, 
+OCP and Industry Vertical Teams to identify Partners, SI’s, ISVs and Customers to partner with Microsoft to shape and deliver 
+solutions on top of our accelerators. 
 
-The sample code represents SDK style examples on how to insert data into the Health Accelerator model for CDS.
+Interested in contributing to an Industry Accelerator please sign up : https://aka.ms/cdmengage
 
-# Utilities
+Read more here : https://community.dynamics.com/365/b/dynamics365isvsuccess
 
-There are 2 primary utilities right now
-1. ImportCodeableConcepts : there is a data\codeableconcepts.csv file that contains all the codeable concepts that we are including. This project will take this file, and the file generated from (2) below and import all the values into your codeable concepts entity instances
+# Getting Started
 
-2. CreateCodeableConceptMappingFile : this solution will allow you to connect to your CE / CDS instance and create a mapping file that downloads the OptionSet values from the codeable concept entity. You will need these values for when you want to import or create new codeable concepts, to map the strings to the actual OptionSet values.
+Please checkout each of the Accelerator folders to download SDK Samples, documentation, sample code,
+sample apps and sample data.
+
+# Acclerators 
+
+please check here for a link to each specific Accelerator blogs as they are released
+
+Health - https://community.dynamics.com/365/b/healthaccelerator 
+
 
 # Requirements
 
 You will need a full CDS / Customer Engagement v9.0 or greater Dynamics 365 instance. For some examples you will also need a Power BI / Power BI Pro LICENSE and possibly a Microsoft Azure subscription for some of the AI and AAD examples.
-
-# Contributing
-
-If you want to contribute reach out to us on LinkedIn or sign up here https://aka.ms/cdmengage 
 
 # Legal Notice
 
