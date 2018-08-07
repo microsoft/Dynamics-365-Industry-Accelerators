@@ -46,8 +46,8 @@ namespace Microsoft.Dynamics.Health.ParseCodeableConcepts
             // you should not store your password and information directly in this file
             // but use this only for an as-is sample
             Credentials = new ClientCredentials();
-            Credentials.UserName.UserName = "michael@msdynaccelerators.onmicrosoft.com";
-            Credentials.UserName.Password = "Raven#2018";
+            Credentials.UserName.UserName = "xxxxx";
+            Credentials.UserName.Password = "xxxxx";
 
 
             // this is the file used by the our Import Utiliity 
