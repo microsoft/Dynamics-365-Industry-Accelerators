@@ -38,9 +38,17 @@ Read more here : https://community.dynamics.com/365/b/dynamics365isvsuccess
 Please checkout each of the Accelerator folders to download SDK Samples, documentation, sample code,
 sample apps and sample data.
 
+# Acclerators 
+
+please check here for a link to each specific Accelerator blogs as they are released
+
+Health - https://community.dynamics.com/365/b/healthaccelerator 
+
+
 # Requirements
 
 You will need a full CDS / Customer Engagement v9.0 or greater Dynamics 365 instance. For some examples you will also need a Power BI / Power BI Pro LICENSE and possibly a Microsoft Azure subscription for some of the AI and AAD examples.
+
 # Legal Notice
 
 Microsoft and any contributors grant you a license to the Microsoft documentation and other content in this repository under the Creative Commons Attribution 4.0 International Public License, see the LICENSE file, and grant you a license to any code in the repository under the MIT License, see the LICENSE-CODE file.
