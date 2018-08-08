@@ -1,0 +1,163 @@
+Action Participant Role,935000000
+Action Reason,935000001
+Activity Reason,935000002
+Additional Dosage Instruction,935000003
+Additive Code,935000004
+Administration Method Code,935000005
+Administration Site Code,935000006
+Admit Source,935000007
+Allergy Intolerance,935000008
+Animal Breed,935000009
+Animal Gender,935000010
+Animal Species,935000011
+As Needed Reason Code,935000012
+Body Structure,100000000
+Care Plan Activity,935000013
+Care Plan Activity Category,935000014
+Care Plan Activity Outcome,935000015
+Care Plan Category,935000016
+Care Team Category,935000017
+Clinical Finding,935000018
+Clinical Impression Code,935000019
+Clinical Impression Prognosis,935000020
+Communication Category,935000021
+Condition Category Code,935000022
+Condition Code,935000023
+Condition Outcome Code,935000024
+Condition Severity,935000025
+Condition Stage,935000026
+Contact Entity Type,935000027
+Contact Role,935000028
+Data Requirement Code Filter Value Code,935000029
+Definition Topic,935000030
+Detected Issue,935000031
+Device Component Operational Status,935000032
+Device Component Parameter Group,935000033
+Device Metric Type,935000034
+Device Safety,935000035
+Device Specification Spec Type,935000036
+Device Type,935000037
+Diagnosis Role,935000038
+Diagnostic Report,935000039
+Diet,935000040
+Diet Code,935000041
+Discharge Disposition,935000042
+Encounter Reason Code,935000043
+Encounter Type,935000044
+Endpoint Payload Type,935000045
+Enteral Formula Additive Type Code,935000046
+Enteral Formula Type Code,935000047
+Enteral Route Code,935000048
+Episode Of Care Type,935000049
+Event History,935000050
+Family History Not Done Reason,935000051
+Family Member,935000053
+FHIR Type,935000054
+Financial Account,935000055
+Fluid Consistency Type Code,935000056
+Food Type Code,935000057
+Form Code,935000058
+Goal Category,935000059
+Goal Priority,935000060
+Goal Start Event,935000061
+Goal Target Detail,935000062
+Group,935000063
+Imaging Study,935000064
+Immunization Request,935000065
+Investigation Type,935000066
+Jurisdiction,935000067
+Language,935000068
+Library,935000070
+Link Type,935000071
+Location Type,935000072
+LOINC Code,935000073
+Medication Administration Category,935000074
+Medication As Needed Reason Code,935000075
+Medication Code,935000076
+Medication Container,935000077
+Medication Ingredient,935000078
+Medication Package Content,935000079
+Medication Request Category,935000080
+Medication Statement,935000081
+Nutrient Modifier Code,935000082
+Observation Category Code,935000083
+Observation Component Value,935000084
+Observation Interpretation Code,935000085
+Observation Method,935000086
+Observation Reference Range Applies To Code,935000087
+Observation Reference Range Meaning Code,935000088
+Observation Value Absent Reason,935000089
+Observation Value Code,935000090
+Participant Role,935000091
+Participant Type,935000092
+Referral Type,935000069
+Participation Mode,935000093
+Patient Referral Type,935000094
+Patient Relationship Type,935000095
+Plan Definition Action Code,935000096
+Plan Definition Action Reason,935000097
+Plan Definition Goal Target,935000098
+Practice Setting Code,935000099
+Practitioner Role,935000100
+Practitioner Specialty,935000101
+Priority,935000102
+Procedure Category Code,935000103
+Procedure Code,935000104
+Procedure Device Action Code,935000105
+Procedure Follow up Code,935000106
+Procedure Outcome Code,935000107
+Procedure Performer Role Code,935000108
+Procedure Reason Code,935000109
+Provenance,935000110
+Qualification Code,935000052
+Quantity Unit Code,935000111
+Questionnaire,935000112
+Questionnaire Response,935000113
+Re-Admission Indicator,935000114
+Reason Medication Given Code,935000116
+Reason Medication Not Given Code,935000117
+Referral Method,935000118
+Request Group Action Code,935000119
+Request Group Reason Code,935000120
+Request Intent,935000121
+Resource Type,935000122
+Risk Assessment Code,935000123
+Risk Assessment Method,935000124
+Risk Assessment Outcome,935000125
+Risk Assessment Reason Code,935000126
+Route Code,935000127
+Sequence,935000128
+Service Category,935000129
+Service Characteristic,935000130
+Service Delivery Location Role Type,935000131
+Service Eligibility,935000132
+Service Provision Condition,935000133
+Service Type,935000134
+Snomed CT Medication Codes,935000135
+Special Arrangement,935000136
+Special Courtesy,935000137
+Specialty,935000138
+Specimen Collection Method,935000139
+Specimen Container,935000140
+Specimen Processing Procedure,935000141
+Specimen Type,935000142
+Structure Map,935000143
+Substance Admin Substitution Reason,935000144
+Substance Category Code,935000145
+Substance Code,935000146
+Supplement Type Code,935000147
+Symptom Code,935000148
+Task Business Status,935000149
+Task Code,935000150
+Task Input Parameter Type,935000151
+Task Output Parameter Type,935000152
+Task Performer Type,935000153
+Task Reason,935000154
+Task Status Reason,935000155
+Texture Modified Food Type Code,935000156
+Texture Modifier Code,935000157
+Topic,935000158
+Use Context,935000159
+Value Set,935000160
+Vision Prescription Product Code,935000161
+Vision Prescription Reason Code,935000162
