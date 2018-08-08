@@ -38,6 +38,10 @@ Read more here : https://community.dynamics.com/365/b/dynamics365isvsuccess
 Please checkout each of the Accelerator folders to download SDK Samples, documentation, sample code,
 sample apps and sample data.
 
+# contributing
+
+If you wish to contribute please clone the repo. then for each accelerator, please modify the files that are in the proper folder of the proper branch. So for Health create checkout Health locally. Then in the health folder, make all your changes. Each contains all files, but only the sub folders that match up with the accelerator branch will be merged. Merges to master will occur from these sub branches only.
+
 # Acclerators 
 
 please check here for a link to each specific Accelerator blogs as they are released
