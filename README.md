@@ -40,7 +40,7 @@ sample apps and sample data.
 
 # Contributing
 
-If you wish to contribute please clone the repo. then for each accelerator, please modify the files that are in the proper folder of the proper branch. So for Health create checkout Health locally. Then in the health folder, make all your changes. Each contains all files, but only the sub folders that match up with the accelerator branch will be merged. Merges to master will occur from these sub branches only.
+If you wish to contribute please clone the repo. For each accelerator, please modify the files that are in the proper folder of the proper branch. So for Health create checkout Health locally. Then in the health sub-folder of the health branch, make all your changes. Each branch contains all files for all accelerators, but only the sub-folders that match up with the accelerator branch will be merged into that branch. Merges to master will occur from these branches/sub-folder combinations only.
 
 # Acclerators 
 
