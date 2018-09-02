@@ -24,6 +24,8 @@ using System.ServiceModel.Description;
 using System.Net;
 using System.Linq;
 
+using cdm;
+
 namespace Microsoft.Dynamics.Health.ParseCodeableConcepts
 {
     class Program
@@ -37,7 +39,7 @@ namespace Microsoft.Dynamics.Health.ParseCodeableConcepts
             // you should not store your password and information directly in this file
             // but use this only for an as-is sample
             OrganizationServiceProxy _serviceProxy;
-            Uri OrganizationUri = new Uri("https://msdynhealthaccelerator.crm.dynamics.com/XRMServices/2011/Organization.svc");
+            Uri OrganizationUri = new Uri("https://healthacceleratordit.crm.dynamics.com/XRMServices/2011/Organization.svc");
             Uri HomeRealmUri = null; 
             ClientCredentials Credentials = null;
             ClientCredentials DeviceCredentials = null; 
@@ -46,8 +48,8 @@ namespace Microsoft.Dynamics.Health.ParseCodeableConcepts
             // you should not store your password and information directly in this file
             // but use this only for an as-is sample
             Credentials = new ClientCredentials();
-            Credentials.UserName.UserName = "xxxxx";
-            Credentials.UserName.Password = "xxxxx";
+            Credentials.UserName.UserName = "apiaccount@msdynaccelerators.onmicrosoft.com";
+            Credentials.UserName.Password = "Sadie#2013";
 
 
             // this is the file used by the our Import Utiliity 

@@ -43,7 +43,7 @@ namespace Microsoft.Dynamics.Health.Import.CodeableConcepts
             // this is a sample utility
             // you should not store your password and information directly in this file
             // but use this only for an as-is sample
-            Uri OrganizationUri = new Uri("https://msdynhealthaccelerator.crm.dynamics.com/XRMServices/2011/Organization.svc");
+            Uri OrganizationUri = new Uri("https://healthacceleratordevmgernfull.crm.dynamics.com/XRMServices/2011/Organization.svc");
             Uri HomeRealmUri = null;
 
             ClientCredentials Credentials = null;
@@ -57,8 +57,8 @@ namespace Microsoft.Dynamics.Health.Import.CodeableConcepts
             // you should not store your password and information directly in this file
             // but use this only for an as-is sample
             Credentials = new ClientCredentials();
-            Credentials.UserName.UserName = "xxxx";
-            Credentials.UserName.Password = "xxxxx";
+            Credentials.UserName.UserName = "michael@msdynaccelerators.onmicrosoft.com";
+            Credentials.UserName.Password = "Kendra#2018";
 
             try
             {
@@ -202,7 +202,8 @@ namespace Microsoft.Dynamics.Health.Import.CodeableConcepts
 
                         codeableconcept["msemr_type"] = optionSetType;
                         codeableconcept["msemr_text"] = (concept.Split('\t')[1]).Trim(); // set same as name
-                        codeableconcept["msemr_name"] = ((concept.Split('\t')[0]).Trim() + "-" + (concept.Split('\t')[2]).Trim());
+                        //I changed the below to create the name so that it would show up properly in the subgrid of active patients
+                        codeableconcept["msemr_name"] = (concept.Split('\t')[1]).Trim();  //((concept.Split('\t')[0]).Trim() + "-" + (concept.Split('\t')[2]).Trim());
 
                         input.Entities.Add(codeableconcept);
                     }

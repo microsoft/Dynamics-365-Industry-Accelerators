@@ -20624,3 +20624,34 @@ low-priority	Low Priority	Goal Priority
 10896-9 	Eastern equine encephalitis virus IgG Ab [Titer] in Serum by Immunofluorescence	LOINC Code
 10897-7 	Eastern equine encephalitis virus IgG Ab [Titer] in Cerebral spinal fluid by Immunofluorescence	LOINC Code
 10898-5 	Eastern equine encephalitis virus IgM Ab [Titer] in Serum by Immunofluorescence	LOINC Code
+BRO	brother	Patient Relationship Type
+HBRO	half-brother	Patient Relationship Type
+NBRO	natural brother	Patient Relationship Type
+TWINBRO	twin brother	Patient Relationship Type
+FTWINBRO	fraternal twin brother	Patient Relationship Type
+ITWINBRO	identical twin brother	Patient Relationship Type
+STPBRO	stepbrother	Patient Relationship Type
+HSIB	half-sibling	Patient Relationship Type
+HSIS	half-sister	Patient Relationship Type
+NSIB	natural sibling	Patient Relationship Type
+NSIS	natural sister	Patient Relationship Type
+TWINSIS	twin sister	Patient Relationship Type
+FTWINSIS	fraternal twin sister	Patient Relationship Type
+ITWINSIS	identical twin sister	Patient Relationship Type
+TWIN	twin	Patient Relationship Type
+FTWIN	fraternal twin	Patient Relationship Type
+ITWIN	identical twin	Patient Relationship Type
+SIS	sister	Patient Relationship Type
+STPSIS	stepsister	Patient Relationship Type
+STPSIB	step sibling	Patient Relationship Type
+SIGOTHR	significant other	Patient Relationship Type
+DOMPART	domestic partner	Patient Relationship Type
+FMRSPS	former spouse	Patient Relationship Type
+SPS	spouse	Patient Relationship Type
+HUSB	husband	Patient Relationship Type
+WIFE	wife	Patient Relationship Type
+FRND	unrelated friend	Patient Relationship Type
+NBOR	neighbor	Patient Relationship Type
+ONESELF	self	Patient Relationship Type
+ROOM	Roommate	Patient Relationship Type
+
