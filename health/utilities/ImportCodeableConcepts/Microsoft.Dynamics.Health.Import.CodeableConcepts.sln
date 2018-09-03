@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Dynamics.Health.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Dynamics.Health.ParseCodeableConcepts", "..\CreateCodeableConceptMappingFile\Microsoft.Dynamics.Health.ParseCodeableConcepts.csproj", "{40B71789-6814-4EE9-8C8B-C06D8B97A5B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Dynamics.Health.ExportOptionSetValues", "..\Microsoft.Dynamics.Health.ExportOptionSetValues\Microsoft.Dynamics.Health.ExportOptionSetValues.csproj", "{B3CB90C5-DCC2-4585-BB62-511B19EF8CE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{40B71789-6814-4EE9-8C8B-C06D8B97A5B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40B71789-6814-4EE9-8C8B-C06D8B97A5B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40B71789-6814-4EE9-8C8B-C06D8B97A5B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3CB90C5-DCC2-4585-BB62-511B19EF8CE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3CB90C5-DCC2-4585-BB62-511B19EF8CE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3CB90C5-DCC2-4585-BB62-511B19EF8CE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3CB90C5-DCC2-4585-BB62-511B19EF8CE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

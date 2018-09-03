@@ -39,7 +39,7 @@ namespace Microsoft.Dynamics.Health.ParseCodeableConcepts
             // you should not store your password and information directly in this file
             // but use this only for an as-is sample
             OrganizationServiceProxy _serviceProxy;
-            Uri OrganizationUri = new Uri("https://healthacceleratordit.crm.dynamics.com/XRMServices/2011/Organization.svc");
+            Uri OrganizationUri = new Uri("https://healthacceleratordevmgernfull.crm.dynamics.com/XRMServices/2011/Organization.svc");
             Uri HomeRealmUri = null; 
             ClientCredentials Credentials = null;
             ClientCredentials DeviceCredentials = null; 
