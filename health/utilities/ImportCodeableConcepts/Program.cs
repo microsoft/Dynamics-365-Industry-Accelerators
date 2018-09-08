@@ -39,11 +39,10 @@ namespace Microsoft.Dynamics.Health.Import.CodeableConcepts
 
         static void Main(string[] args)
         {
-
             // this is a sample utility
             // you should not store your password and information directly in this file
             // but use this only for an as-is sample
-            Uri OrganizationUri = new Uri("https://healthacceleratordevmgernfull.crm.dynamics.com/XRMServices/2011/Organization.svc");
+            Uri OrganizationUri = new Uri("https://healthacceleratormsteamsdev.crm.dynamics.com/XRMServices/2011/Organization.svc");
             Uri HomeRealmUri = null;
 
             ClientCredentials Credentials = null;
