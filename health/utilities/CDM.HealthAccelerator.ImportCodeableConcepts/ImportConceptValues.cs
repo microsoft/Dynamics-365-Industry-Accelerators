@@ -23,44 +23,44 @@ using System.ServiceModel.Description;
 using System.Net;
 using System.Linq;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Crm.Sdk.Samples;
+using System.ServiceModel;
+using System.Configuration;
 
 namespace CDM.HealthAccelerator.ImportCodeableConcepts
 {
-    class Program
+    class ImportConceptValues
     {
+
+        #region Class Members
+
+        private static OrganizationServiceProxy _serviceProxy;
+        private static IOrganizationService _service;
+
         private static int failures = 0;
         private static int successes = 0;
         private static int skipped = 0;
 
         private const int BATCH_SIZE = 1000;
 
-        private static OrganizationServiceProxy _serviceProxy;
         private static Dictionary<string, int> types = null;
+        #endregion
 
-        static void Main(string[] args)
+        #region Create Codeable Concept Maps
+        /// <summary>
+        /// Demonstrates sharing records by exercising various access messages including:
+        /// Grant, Modify, Revoke, RetrievePrincipalAccess, and 
+        /// RetrievePrincipalsAndAccess.
+        /// </summary>
+        /// <param name="serverConfig">Contains server connection information.</param>
+        /// <param name="promptforDelete">When True, the user will be prompted to delete all
+        /// created entities.</param>
+        public void Run(ServerConnection.Configuration serverConfig)
         {
-            // this is a sample utility
-            // you should not store your password and information directly in this file
-            // but use this only for an as-is sample
-            Uri OrganizationUri = new Uri("https://healthacceleratormsteamsdev.crm.dynamics.com/XRMServices/2011/Organization.svc");
-            Uri HomeRealmUri = null;
-
-            ClientCredentials Credentials = null;
-            ClientCredentials DeviceCredentials = null;
-
-            failures = 0;
-            successes = 0;
-            skipped = 0;
-
-            // this is a sample utility
-            // you should not store your password and information directly in this file
-            // but use this only for an as-is sample
-            Credentials = new ClientCredentials();
-            Credentials.UserName.UserName = "michael@msdynaccelerators.onmicrosoft.com";
-            Credentials.UserName.Password = "Kendra#2018";
-
             try
             {
+                Console.WriteLine("Importing codeable concept values");
+
                 // First thing we need to do is load our mapping file
                 // so we can insert the codeable concepts in by mapping
                 // the string value we have in our codeable concept list
@@ -69,20 +69,14 @@ namespace CDM.HealthAccelerator.ImportCodeableConcepts
                 #region Load OptionSet Value to Text Mappings
                 // this is the file used by the our Import Utiliity 
                 // feel free to change this
-                string picklistmappingfilename = @"\optionsetsourcevalues.csv";
-
-                string picklistmappingfilepath = AppDomain.CurrentDomain.BaseDirectory.EndsWith(@"\") ?
-                                        AppDomain.CurrentDomain.BaseDirectory + "data" :
-                                        AppDomain.CurrentDomain.BaseDirectory + @"\data";
-
-                string picklistmappingfile = picklistmappingfilepath + picklistmappingfilename;
+                string picklistmappingfile = ConfigurationManager.AppSettings["cdm:conceptpicklistvalues"];
 
                 types = File.ReadAllLines(picklistmappingfile).ToList().ToDictionary(x => x.Split(',')[0].Trim(), x => int.Parse((x.Split(',')[1].Trim())));
 
                 if ((types == null) || (types.Count == 0))
                 {
                     Console.WriteLine("Could not find any optionset values, which are required for mappings");
-                    System.Threading.Thread.Sleep(2000);
+                    System.Threading.Thread.Sleep(1000);
                     return;
                 }
 
@@ -92,20 +86,15 @@ namespace CDM.HealthAccelerator.ImportCodeableConcepts
                 // now we need to load up all the codeable concepts
                 // remember that the all the values have to be parsed
                 // so we can load them all into a list
-                string codeableconceptsfilename = @"\CodeableConceptValues.txt";
 
-                string codeableconceptsfilepath = AppDomain.CurrentDomain.BaseDirectory.EndsWith(@"\") ?
-                                        AppDomain.CurrentDomain.BaseDirectory + "data" :
-                                        AppDomain.CurrentDomain.BaseDirectory + @"\data";
-
-                string codeableconceptsfile = codeableconceptsfilepath + codeableconceptsfilename;
+                string codeableconceptsfile = ConfigurationManager.AppSettings["cdm:concepinstancetvalues"];
 
                 List<string> codeableconcepts = File.ReadAllLines(codeableconceptsfile).ToList();
 
                 if ((codeableconcepts == null) || (codeableconcepts.Count == 0))
                 {
                     Console.WriteLine("Could not find any codeable concepts values, which are required for mappings");
-                    System.Threading.Thread.Sleep(2000);
+                    System.Threading.Thread.Sleep(1000);
                     return;
                 }
 
@@ -114,10 +103,15 @@ namespace CDM.HealthAccelerator.ImportCodeableConcepts
                 // we need this to support communicating with Dynamics Online Instances 
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-                using (_serviceProxy = new OrganizationServiceProxy(OrganizationUri, HomeRealmUri, Credentials, DeviceCredentials))
+                //<snippetSharingRecords1>
+                // Connect to the Organization service. 
+                // The using statement assures that the service proxy will be properly disposed.
+                using (_serviceProxy = new OrganizationServiceProxy(serverConfig.OrganizationUri, serverConfig.HomeRealmUri, serverConfig.Credentials, serverConfig.DeviceCredentials))
                 {
                     // This statement is required to enable early-bound type support.
                     _serviceProxy.EnableProxyTypes();
+
+                    _service = (IOrganizationService)_serviceProxy;
 
                     // we have a batch of things to do
                     do
@@ -146,16 +140,84 @@ namespace CDM.HealthAccelerator.ImportCodeableConcepts
 
                         break;
 
-                    }while(true);
+                    } while (true);
 
-                    Console.WriteLine("Total created[" + successes.ToString() + "] failed[" + failures.ToString() + "] skipped[" + skipped.ToString()+ "]");
+                    Console.WriteLine("Total created[" + successes.ToString() + "] failed[" + failures.ToString() + "] skipped[" + skipped.ToString() + "]");
+
                 }
             }
-            catch (Exception ex)
-            { 
-                Console.WriteLine(ex.ToString());
-            }
 
+            // Catch any service fault exceptions that Microsoft Dynamics CRM throws.
+            catch (FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault>)
+            {
+                // You can handle an exception here or pass it back to the calling method.
+                throw;
+            }
+        }
+
+        #endregion Create Codeable Concept Maps     
+
+        static void Main(string[] args)
+        {
+            try
+            {
+                // Obtain the target organization's Web address and client logon 
+                // credentials from the user.
+                ServerConnection serverConnect = new ServerConnection();
+                ServerConnection.Configuration config = serverConnect.GetServerConfiguration();
+
+                ImportConceptValues app = new ImportConceptValues();
+                app.Run(config);
+            }
+            catch (FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> ex)
+            {
+                Console.WriteLine("The application terminated with an error.");
+                Console.WriteLine("Timestamp: {0}", ex.Detail.Timestamp);
+                Console.WriteLine("Code: {0}", ex.Detail.ErrorCode);
+                Console.WriteLine("Message: {0}", ex.Detail.Message);
+                Console.WriteLine("Plugin Trace: {0}", ex.Detail.TraceText);
+                Console.WriteLine("Inner Fault: {0}",
+                    null == ex.Detail.InnerFault ? "No Inner Fault" : "Has Inner Fault");
+            }
+            catch (System.TimeoutException ex)
+            {
+                Console.WriteLine("The application terminated with an error.");
+                Console.WriteLine("Message: {0}", ex.Message);
+                Console.WriteLine("Stack Trace: {0}", ex.StackTrace);
+                Console.WriteLine("Inner Fault: {0}",
+                    null == ex.InnerException.Message ? "No Inner Fault" : ex.InnerException.Message);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine("The application terminated with an error.");
+                Console.WriteLine(ex.Message);
+
+                // Display the details of the inner exception.
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine(ex.InnerException.Message);
+
+                    FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fe = ex.InnerException
+                        as FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault>;
+                    if (fe != null)
+                    {
+                        Console.WriteLine("Timestamp: {0}", fe.Detail.Timestamp);
+                        Console.WriteLine("Code: {0}", fe.Detail.ErrorCode);
+                        Console.WriteLine("Message: {0}", fe.Detail.Message);
+                        Console.WriteLine("Plugin Trace: {0}", fe.Detail.TraceText);
+                        Console.WriteLine("Inner Fault: {0}",
+                            null == fe.Detail.InnerFault ? "No Inner Fault" : "Has Inner Fault");
+                    }
+                }
+            }
+            // Additional exceptions to catch: SecurityTokenValidationException, ExpiredSecurityTokenException,
+            // SecurityAccessDeniedException, MessageSecurityException, and SecurityNegotiationException.
+
+            finally
+            {
+                Console.WriteLine("Press <Enter> to exit.");
+                Console.ReadLine();
+            }
         }
 
         private static void BatchImport(List<string> codeableconcepts)

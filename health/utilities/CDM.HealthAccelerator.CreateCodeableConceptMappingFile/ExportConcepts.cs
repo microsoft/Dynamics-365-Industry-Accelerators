@@ -28,10 +28,11 @@ using cdm;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Crm.Sdk.Samples;
 using System.ServiceModel;
+using System.Configuration;
 
 namespace CDM.HealthAccelerator.ParseCodeableConcepts
 {
-    class CreateConceptMap
+    class ExportConcepts
     {
         #region Class Members
 
@@ -53,13 +54,18 @@ namespace CDM.HealthAccelerator.ParseCodeableConcepts
         {
             try
             {
-                string picklistmappingfilename = @"\ccpicklistvaluesource.csv";
+                Console.WriteLine("Export codeable concept pick list values");
 
-                string picklistmappingfilepath = AppDomain.CurrentDomain.BaseDirectory.EndsWith(@"\") ?
-                                        AppDomain.CurrentDomain.BaseDirectory + "data" :
-                                        AppDomain.CurrentDomain.BaseDirectory + @"\data";
+                string picklistmappingfilename = ConfigurationManager.AppSettings["cdm:conceptpicklistvalues"];
 
-                string picklistmappingfile = picklistmappingfilepath + picklistmappingfilename;
+                if (string.IsNullOrEmpty(picklistmappingfilename))
+                {
+                    Console.WriteLine("Error: could not find the pick list mapping file name value");
+                    return;
+                }
+
+                // we need this to support communicating with Dynamics Online Instances 
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 //<snippetSharingRecords1>
                 // Connect to the Organization service. 
@@ -109,7 +115,7 @@ namespace CDM.HealthAccelerator.ParseCodeableConcepts
                     {
                         totalOptions++;
 
-                        // add to our stirng list of options
+                        // add to our string list of options
                         picklistmappingdata.Add(option.Text.Trim() + "," + option.Value.ToString().Trim()); //default to first string of the label
 
                         // write out our option count
@@ -122,14 +128,16 @@ namespace CDM.HealthAccelerator.ParseCodeableConcepts
                     // if we don't have any don't write anything
                     if (picklistmappingdata.Count > 0)
                     {
-                        File.Delete(picklistmappingfile); // Remove this line if you don't want to erase the current version
-                        File.WriteAllLines(picklistmappingfile, picklistmappingdata);
+                        File.Delete(picklistmappingfilename); // Remove this line if you don't want to erase the current version
+                        File.WriteAllLines(picklistmappingfilename, picklistmappingdata);
+
+                        Console.SetCursorPosition(0, Console.CursorTop);
+                        Console.WriteLine("Created codeable concepts mapping file [" + picklistmappingfilename + "]");
                     }
                     else
-                    {
+                    { 
                         Console.WriteLine("Could not find any Codeable Concept Types");
                     }
-
                 }
             }
 
@@ -158,7 +166,7 @@ namespace CDM.HealthAccelerator.ParseCodeableConcepts
                 ServerConnection serverConnect = new ServerConnection();
                 ServerConnection.Configuration config = serverConnect.GetServerConfiguration();
 
-                CreateConceptMap app = new CreateConceptMap();
+                ExportConcepts app = new ExportConcepts();
                 app.Run(config);
             }
             catch (FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> ex)
