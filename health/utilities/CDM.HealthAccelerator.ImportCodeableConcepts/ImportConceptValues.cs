@@ -261,10 +261,24 @@ namespace CDM.HealthAccelerator.ImportCodeableConcepts
                         // set our type value (it's the OptionSet)
                         OptionSetValue optionSetType = new OptionSetValue(typeValue);
 
+                        string version = ConfigurationManager.AppSettings["cdm:solutionversion"];
+
                         codeableconcept["msemr_type"] = optionSetType;
                         codeableconcept["msemr_text"] = (concept.Split('\t')[1]).Trim(); // set same as name
-                        //I changed the below to create the name so that it would show up properly in the subgrid of active patients
-                        codeableconcept["msemr_name"] = (concept.Split('\t')[1]).Trim();  //((concept.Split('\t')[0]).Trim() + "-" + (concept.Split('\t')[2]).Trim());
+                                                                                         //I changed the below to create the name so that it would show up properly in the subgrid of active patients
+                        switch (version)
+                        {
+                            case "1.8.1": // temporary fix while we fix the BUG for length to 500
+                                {
+                                    codeableconcept["msemr_name"] = ((concept.Split('\t')[1]).Trim()).Substring(0,100);  //((concept.Split('\t')[0]).Trim() + "-" + (concept.Split('\t')[2]).Trim());
+                                }
+                                break;
+                                default:
+                                {
+                                    codeableconcept["msemr_name"] = ((concept.Split('\t')[1]).Trim()).Substring(0, 500);  //((concept.Split('\t')[0]).Trim() + "-" + (concept.Split('\t')[2]).Trim());
+                                }
+                                break;
+                        }
 
                         input.Entities.Add(codeableconcept);
                     }
