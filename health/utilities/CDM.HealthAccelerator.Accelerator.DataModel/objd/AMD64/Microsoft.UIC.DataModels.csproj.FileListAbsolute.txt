@@ -1,0 +1,12 @@
+E:\GitRepo\Dynamics\UIC\out\debug-AMD64\Microsoft.UIC.DataModels\sampledata\examlist.txt
+E:\GitRepo\Dynamics\UIC\out\debug-AMD64\Microsoft.UIC.DataModels\sampledata\female_names.txt
+E:\GitRepo\Dynamics\UIC\out\debug-AMD64\Microsoft.UIC.DataModels\sampledata\last_names.txt
+E:\GitRepo\Dynamics\UIC\out\debug-AMD64\Microsoft.UIC.DataModels\sampledata\male_names.txt
+E:\GitRepo\Dynamics\UIC\out\debug-AMD64\Microsoft.UIC.DataModels\sampledata\zip_code_database.txt
+E:\GitRepo\Dynamics\UIC\out\debug-AMD64\Microsoft.UIC.DataModels\Microsoft.UIC.DataModels.dll.config
+E:\GitRepo\Dynamics\UIC\out\debug-AMD64\Microsoft.UIC.DataModels\Microsoft.UIC.DataModels.dll
+E:\GitRepo\Dynamics\UIC\out\debug-AMD64\Microsoft.UIC.DataModels\Microsoft.UIC.DataModels.pdb
+E:\GitRepo\Dynamics\UIC\src\Platform\Microsoft.UIC.DataModels\objd\AMD64\Microsoft.UIC.DataModels.csprojResolveAssemblyReference.cache
+E:\GitRepo\Dynamics\UIC\src\Platform\Microsoft.UIC.DataModels\objd\AMD64\_generated.cs
+E:\GitRepo\Dynamics\UIC\src\Platform\Microsoft.UIC.DataModels\objd\AMD64\Microsoft.UIC.DataModels.dll
+E:\GitRepo\Dynamics\UIC\src\Platform\Microsoft.UIC.DataModels\objd\AMD64\Microsoft.UIC.DataModels.pdb
