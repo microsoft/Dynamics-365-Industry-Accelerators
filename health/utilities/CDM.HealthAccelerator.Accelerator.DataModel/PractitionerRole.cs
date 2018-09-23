@@ -227,7 +227,7 @@ namespace CDM.HealthAccelerator.DataModel
         }
 
 
-        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword, string cdsEmaildomain)
+        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
         {
             Guid practitionerRoleId = Guid.Empty;
 

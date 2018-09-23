@@ -127,7 +127,7 @@ namespace CDM.HealthAccelerator.DataModel
             PeriodEndDate = endDate;
         }
 
-        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword, string cdsEmailDomain)
+        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
         {
             Guid practitionerQualificationId = Guid.Empty;
 

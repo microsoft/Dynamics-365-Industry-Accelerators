@@ -14,6 +14,7 @@
 // =====================================================================
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -310,14 +311,9 @@ namespace CDM.HealthAccelerator.DataModel
                 if (!CacheInitted)
                 {
 
-                    string localpath = AppDomain.CurrentDomain.BaseDirectory;
+                    string filepath = ConfigurationManager.AppSettings["cdm:temporaryfilepath"];
 
-                    if (!localpath.EndsWith(@"\"))
-                    {
-                        localpath += @"\";
-                    }
-
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\referralrequests.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\referralrequests.txt"))
                     {
                         while (true)
                         {
@@ -334,7 +330,7 @@ namespace CDM.HealthAccelerator.DataModel
                         }
                     }
 
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\medications.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\medications.txt"))
                     {
                         while (true)
                         {
@@ -351,7 +347,7 @@ namespace CDM.HealthAccelerator.DataModel
                         }
                     }
 
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\procedures.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\procedures.txt"))
                     {
                         while (true)
                         {
@@ -368,7 +364,7 @@ namespace CDM.HealthAccelerator.DataModel
                         }
                     }
 
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\conditions.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\conditions.txt"))
                     {
                         while (true)
                         {
@@ -385,7 +381,7 @@ namespace CDM.HealthAccelerator.DataModel
                         }
                     }
 
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\devices.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\devices.txt"))
                     {
                         while (true)
                         {
@@ -402,7 +398,7 @@ namespace CDM.HealthAccelerator.DataModel
                         }
                     }
 
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\nutrition_orders.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\nutrition_orders.txt"))
                     {
                         while (true)
                         {
@@ -419,7 +415,7 @@ namespace CDM.HealthAccelerator.DataModel
                         }
                     }
 
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\allergy_item.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\allergy_item.txt"))
                     {
                         while (true)
                         {
@@ -437,7 +433,7 @@ namespace CDM.HealthAccelerator.DataModel
                     }
 
                     //// First read in our female names
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\practitioner_qualifications.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\practitioner_qualifications.txt"))
                     {
                         while (true)
                         {
@@ -454,7 +450,7 @@ namespace CDM.HealthAccelerator.DataModel
                         }
                     }
 
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\practitioner_roles.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\practitioner_roles.txt"))
                     {
                         while (true)
                         {
@@ -471,7 +467,7 @@ namespace CDM.HealthAccelerator.DataModel
                         }
                     }
 
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\practitioner_salutations.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\practitioner_salutations.txt"))
                     {
                         while (true)
                         {
@@ -487,7 +483,7 @@ namespace CDM.HealthAccelerator.DataModel
                             }
                         }
                     }
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\related_person_types.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\related_person_types.txt"))
                     {
                         while (true)
                         {
@@ -505,7 +501,7 @@ namespace CDM.HealthAccelerator.DataModel
                     }
 
                     //// First read in our female names
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\female_names.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\female_names.txt"))
                     {
                         while (true)
                         {
@@ -522,7 +518,7 @@ namespace CDM.HealthAccelerator.DataModel
                         }
                     }
 
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\languages.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\languages.txt"))
                     {
                         while (true)
                         {
@@ -540,7 +536,7 @@ namespace CDM.HealthAccelerator.DataModel
                     }
 
                     //// the first names
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\male_names.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\male_names.txt"))
                     {
                         while (true)
                         {
@@ -558,7 +554,7 @@ namespace CDM.HealthAccelerator.DataModel
                     }
 
                     //// no our last names
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\last_names.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\last_names.txt"))
                     {
                         while (true)
                         {
@@ -576,7 +572,7 @@ namespace CDM.HealthAccelerator.DataModel
                     }
 
                     //// now our addressInfos, area codes etc
-                    using (TextReader reader = File.OpenText(localpath + @"resourcefile\zip_code_database.txt"))
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\zip_code_database.txt"))
                     {
                         while (true)
                         {

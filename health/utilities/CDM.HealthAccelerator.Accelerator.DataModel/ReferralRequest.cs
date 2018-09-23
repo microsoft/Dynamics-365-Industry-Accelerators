@@ -177,7 +177,7 @@ namespace CDM.HealthAccelerator.DataModel
             OccurrendateDate = rdt.Next();
         }
 
-        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword, string cdsEmailDomain)
+        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
         {
             Guid referralrequestId = Guid.Empty;
 

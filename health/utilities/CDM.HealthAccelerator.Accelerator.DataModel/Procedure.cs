@@ -134,7 +134,7 @@ namespace CDM.HealthAccelerator.DataModel
             ProcedureDateTime = rdt.Next();
         }
 
-        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword, string cdsEmailDomain)
+        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
         {
             Guid patientProcedureId = Guid.Empty;
 

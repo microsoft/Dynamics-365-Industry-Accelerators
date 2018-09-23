@@ -51,6 +51,21 @@ namespace CDM.HealthAccelerator.DataModel
             Female = 2
         }
 
+        private string emailAddressDomain;
+
+        public string EmailAddressDomain
+        {
+            get
+            {
+                return emailAddressDomain;
+            }
+
+            set
+            {
+                emailAddressDomain = value;
+            }
+        }
+
         private ContactType contactType;
 
         public ContactType CDMContactType

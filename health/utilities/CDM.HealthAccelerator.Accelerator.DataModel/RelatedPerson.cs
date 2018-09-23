@@ -36,7 +36,6 @@ namespace CDM.HealthAccelerator.DataModel
     [Serializable]
     public class RelatedPerson : Profile
     {
-        
         /// <summary>
         /// Initializes a new instance of the <see cref="RelatedPerson"/> class. 
         /// d04787ba-613b-48f5-9d50-652b04073718
@@ -140,7 +139,7 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
-        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword, string cdsEmaildomain)
+        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
         {
             Guid profileId = Guid.Empty;
 
@@ -195,7 +194,7 @@ namespace CDM.HealthAccelerator.DataModel
                     addContact.MobilePhone = MobilePhone;
                     addContact.Telephone2 = Telephone2;
                     addContact.Address1_Country = Address1Country;
-                    addContact.EMailAddress1 = FirstName + "." + LastName + "@" + cdsEmaildomain;
+                    addContact.EMailAddress1 = FirstName + "." + LastName + "@" + EmailAddressDomain;
                     addContact.Address1_Country = Address1Country;
                     addContact.Salutation = Salutation;
                     addContact.BirthDate = BirthDate;
@@ -235,7 +234,59 @@ namespace CDM.HealthAccelerator.DataModel
 
         public override Guid WriteToCDS(OrganizationServiceProxy _serviceProxy)
         {
-            return Guid.Empty;
+            Guid profileId = Guid.Empty;
+
+            try
+            {
+
+                HealthCDM.Contact addContact = new HealthCDM.Contact();
+
+                addContact.GenderCode = new OptionSetValue(GenderCode);
+                addContact.FirstName = FirstName;
+                addContact.LastName = LastName;
+                addContact.Address1_Line1 = Address1Line1;
+                addContact.Address1_City = Address1City;
+                addContact.Address1_StateOrProvince = Address1StateOrProvince;
+                addContact.Address1_PostalCode = Address1PostalCode;
+                addContact.Telephone1 = Telephone1;
+                addContact.MobilePhone = MobilePhone;
+                addContact.Telephone2 = Telephone2;
+                addContact.Address1_Country = Address1Country;
+                addContact.EMailAddress1 = FirstName + "." + LastName + "@" + EmailAddressDomain;
+                addContact.Address1_Country = Address1Country;
+                addContact.Salutation = Salutation;
+                addContact.BirthDate = BirthDate;
+
+                // set the primary language
+                addContact.msemr_Communication1Language = new EntityReference(HealthCDM.msemr_codeableconcept.EntityLogicalName, GetCodeableConceptId(_serviceProxy, PrimaryLanguageCode, (int)HealthCDMEnums.CodeableConcept_Type.Language));
+
+                addContact.msemr_ContactType = new OptionSetValue((int)HealthCDMEnums.Contact_Contacttype.RelatedPerson);
+
+                try
+                {
+                    profileId = _serviceProxy.Create(addContact);
+
+                    if (profileId != Guid.Empty)
+                    {
+                        ContactId = profileId.ToString();
+
+                    }
+                    else
+                    {
+                        throw new Exception("Contact Id == null");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+
+            return profileId;
         }
     }
 }

@@ -179,7 +179,7 @@ namespace CDM.HealthAccelerator.DataModel
             SubjectType = (int)HealthCDMEnums.MedicationRequest_Subjecttype.Patient;
         }
 
-        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword, string cdsEmailDomain)
+        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
         {
             Guid medicationrequestId = Guid.Empty;
 

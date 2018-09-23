@@ -165,7 +165,7 @@ namespace CDM.HealthAccelerator.DataModel
 
         }
 
-        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword, string cdsEmailDomain)
+        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
         {
             Guid patientConditionId = Guid.Empty;
 

@@ -33,6 +33,8 @@ namespace CDM.HealthAccelerator.DataModel
     {
         #region Patient Specific Attributes
 
+
+
         private List<MedicationRequest> medicationRequests = new List<MedicationRequest>();
 
         private List<ReferralRequest> referralRequests = new List<ReferralRequest>();
@@ -452,7 +454,7 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
-        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword, string cdsEmaildomain)
+        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
         {
             Guid profileId = Guid.Empty;
 
@@ -509,7 +511,7 @@ namespace CDM.HealthAccelerator.DataModel
                     addContact.MobilePhone = MobilePhone;
                     addContact.Telephone2 = Telephone2;
                     addContact.Address1_Country = Address1Country;
-                    addContact.EMailAddress1 = FirstName + "." + LastName + "@" + cdsEmaildomain;
+                    addContact.EMailAddress1 = FirstName + "." + LastName + "@" + EmailAddressDomain;
                     addContact.Address1_Country = Address1Country;
                     addContact.Salutation = Salutation;
                     addContact.BirthDate = BirthDate;
@@ -635,7 +637,147 @@ namespace CDM.HealthAccelerator.DataModel
 
         public override Guid WriteToCDS(OrganizationServiceProxy _serviceProxy)
         {
-            return Guid.Empty;
+            Guid profileId = Guid.Empty;
+
+            try
+            {
+
+                HealthCDM.Contact addContact = new HealthCDM.Contact();
+
+                //Set standard atttributes (this could be done via reflection)
+                // but for now this is all we are setting
+                addContact.GenderCode = new OptionSetValue(GenderCode);
+                addContact.FirstName = FirstName;
+                addContact.LastName = LastName;
+                addContact.Address1_Line1 = Address1Line1;
+                addContact.Address1_City = Address1City;
+                addContact.Address1_StateOrProvince = Address1StateOrProvince;
+                addContact.Address1_PostalCode = Address1PostalCode;
+                addContact.Telephone1 = Telephone1;
+                addContact.MobilePhone = MobilePhone;
+                addContact.Telephone2 = Telephone2;
+                addContact.Address1_Country = Address1Country;
+                addContact.EMailAddress1 = FirstName + "." + LastName + "@" + EmailAddressDomain;
+                addContact.Address1_Country = Address1Country;
+                addContact.Salutation = Salutation;
+                addContact.BirthDate = BirthDate;
+                // set the primary language
+                addContact.msemr_Communication1Language = new EntityReference(HealthCDM.msemr_codeableconcept.EntityLogicalName, GetCodeableConceptId(_serviceProxy, PrimaryLanguageCode, (int)HealthCDMEnums.CodeableConcept_Type.Language));
+
+                addContact.msemr_ContactType = new OptionSetValue((int)HealthCDMEnums.Contact_Contacttype.Patient);
+
+                // Set the Primary Practitioner, Emergency Contact & Primary Contacts
+                if (!string.IsNullOrEmpty(PrimaryPractitionerId))
+                {
+                    addContact.msemr_GeneralPractioner = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse(PrimaryPractitionerId));
+                }
+
+                if (!string.IsNullOrEmpty(EmergencyContactId))
+                {
+                    addContact.msemr_Contact1 = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse(EmergencyContactId));
+                    addContact.msemr_Contact1Relationship = new EntityReference(HealthCDM.msemr_codeableconcept.EntityLogicalName, GetCodeableConceptId(_serviceProxy, EmergencyContactRelationshipTypeId, (int)HealthCDMEnums.CodeableConcept_Type.PatientRelationshipType));
+                }
+
+                if (!string.IsNullOrEmpty(PrimaryContactId))
+                {
+                    addContact.msemr_Contact2 = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse(PrimaryContactId));
+                    addContact.msemr_Contact2Relationship = new EntityReference(HealthCDM.msemr_codeableconcept.EntityLogicalName, GetCodeableConceptId(_serviceProxy, PrimaryContactRelationshipTypeId, (int)HealthCDMEnums.CodeableConcept_Type.PatientRelationshipType));
+                }
+
+                addContact.msemr_MedicalRecordNumber = PatientMedicalNumber;
+
+                try
+                {
+                    profileId = _serviceProxy.Create(addContact);
+
+                    if (profileId != Guid.Empty)
+                    {
+                        ContactId = profileId.ToString();
+
+                        // Add alergies to patient
+                        if (AllergyIntolerances.Count > 0)
+                        {
+                            foreach (AllergyIntolerance ai in AllergyIntolerances)
+                            {
+                                ai.PatientId = ContactId;
+                                ai.WriteToCDS(_serviceProxy);
+                            }
+                        }
+
+                        if (NutritionOrders.Count > 0)
+                        {
+                            foreach (NutritionOrder no in NutritionOrders)
+                            {
+                                no.Patient = ContactId;
+                                no.Practitioner = PrimaryPractitionerId;
+                                no.WriteToCDS(_serviceProxy);
+                            }
+                        }
+
+                        if (Conditions.Count > 0)
+                        {
+                            foreach (Condition condition in Conditions)
+                            {
+                                condition.PatientId = ContactId;
+                                condition.PractitionerId = PrimaryPractitionerId;
+                                condition.WriteToCDS(_serviceProxy);
+                            }
+                        }
+
+                        if (Devices.Count > 0)
+                        {
+                            foreach (Device device in Devices)
+                            {
+                                device.PatientId = ContactId;
+                                device.WriteToCDS(_serviceProxy);
+                            }
+                        }
+
+                        if (Procedures.Count > 0)
+                        {
+                            foreach (Procedure procedure in Procedures)
+                            {
+                                procedure.PatientId = ContactId;
+                                procedure.WriteToCDS(_serviceProxy);
+                            }
+                        }
+
+                        if (ReferralRequests.Count > 0)
+                        {
+                            foreach (ReferralRequest request in ReferralRequests)
+                            {
+                                request.PatientId = ContactId;
+                                request.PractitionerId = primaryPractitionerId;
+                                request.WriteToCDS(_serviceProxy);
+                            }
+                        }
+
+                        if (MedicationRequests.Count > 0)
+                        {
+                            foreach (MedicationRequest request in MedicationRequests)
+                            {
+                                request.PatientId = ContactId;
+                                request.PractitionerId = primaryPractitionerId;
+                                request.WriteToCDS(_serviceProxy);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Contact Id == null");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+
+            return profileId;
         }
 
         private static string GenerateMedicalNumber()

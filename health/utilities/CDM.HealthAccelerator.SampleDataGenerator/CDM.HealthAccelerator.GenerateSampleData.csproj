@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>CDM.HealthAccelerator.GenerateSampleData.GenerateData</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AntiXSSLibrary, Version=4.2.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CrmSdk.Extensions.7.1.0.1\lib\net45\AntiXSSLibrary.dll</HintPath>
@@ -132,7 +135,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateCDMHealthData.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="CrmServiceHelpers.cs" />
+    <Compile Include="DeviceIdManager.cs" />
+    <Compile Include="GenerateData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

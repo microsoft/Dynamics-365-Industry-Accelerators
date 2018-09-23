@@ -168,7 +168,7 @@ namespace CDM.HealthAccelerator.DataModel
 
         }
 
-        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword, string cdsEmailDomain)
+        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
         {
             Guid patientDeviceId = Guid.Empty;
 
@@ -286,37 +286,37 @@ namespace CDM.HealthAccelerator.DataModel
         public static string GenerateDeviceVersion()
         {
             return "Version "
-                + RandomGenerator.Next(1, 3).ToString() + "."
-                + RandomGenerator.Next(1, 9).ToString()
-                + RandomGenerator.Next(1, 6).ToString()
-                + RandomGenerator.Next(1, 3).ToString() + "."
-                + RandomGenerator.Next(1, 9).ToString()
-                + RandomGenerator.Next(1, 6).ToString()
-                + RandomGenerator.Next(1, 3).ToString();
+                + BaseRandomGenerator.Next(1, 3).ToString() + "."
+                + BaseRandomGenerator.Next(1, 9).ToString()
+                + BaseRandomGenerator.Next(1, 6).ToString()
+                + BaseRandomGenerator.Next(1, 3).ToString() + "."
+                + BaseRandomGenerator.Next(1, 9).ToString()
+                + BaseRandomGenerator.Next(1, 6).ToString()
+                + BaseRandomGenerator.Next(1, 3).ToString();
         }
 
         public static string GenerateDeviceNumber()
         {
             return "Device Number: "
-                + RandomGenerator.Next(1, 9).ToString() + "."
-                + RandomGenerator.Next(1, 9).ToString()
-                + RandomGenerator.Next(1, 6).ToString() + "."
-                + RandomGenerator.Next(1, 3).ToString() 
-                + RandomGenerator.Next(1, 9).ToString() + "."
-                + RandomGenerator.Next(1, 6).ToString()
-                + RandomGenerator.Next(1, 3).ToString();
+                + BaseRandomGenerator.Next(1, 9).ToString() + "."
+                + BaseRandomGenerator.Next(1, 9).ToString()
+                + BaseRandomGenerator.Next(1, 6).ToString() + "."
+                + BaseRandomGenerator.Next(1, 3).ToString() 
+                + BaseRandomGenerator.Next(1, 9).ToString() + "."
+                + BaseRandomGenerator.Next(1, 6).ToString()
+                + BaseRandomGenerator.Next(1, 3).ToString();
         }
 
         public static string GenerateModelNumber()
         {
             return "Model Number: "
-                + RandomGenerator.Next(1, 9).ToString() + "."
-                + RandomGenerator.Next(1, 9).ToString()
-                + RandomGenerator.Next(1, 6).ToString() + "."
-                + RandomGenerator.Next(1, 3).ToString() 
-                + RandomGenerator.Next(1, 9).ToString()
-                + RandomGenerator.Next(1, 6).ToString()
-                + RandomGenerator.Next(1, 3).ToString();
+                + BaseRandomGenerator.Next(1, 9).ToString() + "."
+                + BaseRandomGenerator.Next(1, 9).ToString()
+                + BaseRandomGenerator.Next(1, 6).ToString() + "."
+                + BaseRandomGenerator.Next(1, 3).ToString() 
+                + BaseRandomGenerator.Next(1, 9).ToString()
+                + BaseRandomGenerator.Next(1, 6).ToString()
+                + BaseRandomGenerator.Next(1, 3).ToString();
         }
 
         public static void ExportToJson(string filename, List<Profile> profiles)

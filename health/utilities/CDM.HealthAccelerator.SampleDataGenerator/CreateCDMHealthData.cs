@@ -128,7 +128,7 @@ namespace CDM.HealthAccelerator.GenerateSampleData
         /// which it will then block (wait on)
         /// until they have completed or failed or shut down 
         /// </summary>
-        public string CreateContacts()
+        public string CreateContacts(OrganizationServiceProxy _service)
         {
             // We need to create our file if it exists
             // or if it's already open, generate a second one.
@@ -154,7 +154,7 @@ namespace CDM.HealthAccelerator.GenerateSampleData
 
                             // create our thread and start it
                             // it's a parameterized query so pass in the proper values from above
-                            Thread clientthread = new Thread(() => CreateCDSContacts());
+                            Thread clientthread = new Thread(() => CreateCDSContacts(_service));
                             clientthread.Name = createthreads.ToString() + "-" + contactType.ToString();
                             clientthread.Start();
 
@@ -226,25 +226,10 @@ namespace CDM.HealthAccelerator.GenerateSampleData
 
         }
 
-        private void CreateCDSContacts()
+        private void CreateCDSContacts(OrganizationServiceProxy _service)
         {
             try
             {
-                #region Get our Login Information
-
-                //create the uri
-                string orgUrl = GetProfileUri();
-
-                //create the credentials
-                string login = GetProfileLogin();
-
-                string pwd = GetProfilePassword();
-
-                string domain = GetProfileDomain();
-
-                #endregion
-
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 while (true)
                 {
                     Profile cdsContact = GetContact();
@@ -254,7 +239,9 @@ namespace CDM.HealthAccelerator.GenerateSampleData
                         break;
                     }
 
-                    Guid entityId = cdsContact.WriteToCDS(orgUrl, login, pwd, EmailDomain);
+                    cdsContact.EmailAddressDomain = EmailDomain;
+
+                    Guid entityId = cdsContact.WriteToCDS(_service);
 
                     if (entityId != Guid.Empty)
                     {
@@ -319,143 +306,6 @@ namespace CDM.HealthAccelerator.GenerateSampleData
         /// supports 3 instances (Online, OnPremise, Dev)
         /// </summary>
         /// <returns></returns>
-
-        #region Login Helper Functions
-        private bool IsOnline()
-        {
-            string activeProfile = GetActiveProfile();
-
-            if (!string.IsNullOrEmpty(activeProfile))
-            {
-                if (activeProfile.Contains("online"))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                throw new ArgumentNullException("Active profile null");
-            }
-        }
-        private string GetActiveProfile()
-        {
-            try
-            {
-                string activeProfile = ConfigurationManager.AppSettings["activeprofile"];
-
-                if (string.IsNullOrEmpty(activeProfile))
-                {
-                    throw new ArgumentNullException("Activate Profile Cannot be Null");
-                }
-
-                return activeProfile;
-
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Error retrieving profile user " + ex.ToString());
-                return string.Empty;
-            }
-        }
-
-        private string GetProfileLogin()
-        {
-            try
-            {
-                string activeProfile = ConfigurationManager.AppSettings["activeprofile"];
-
-                if (string.IsNullOrEmpty(activeProfile))
-                {
-                    throw new ArgumentNullException("Activate Profile Cannot be Null");
-                }
-
-                string profileUser = "crm:" + activeProfile + ":login";
-
-                return ConfigurationManager.AppSettings[profileUser];
-
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Error retrieving profile user " + ex.ToString());
-                return string.Empty;
-            }
-        }
-
-        private string GetProfileDomain()
-        {
-            try
-            {
-                string activeProfile = ConfigurationManager.AppSettings["activeprofile"];
-
-                if (string.IsNullOrEmpty(activeProfile))
-                {
-                    throw new ArgumentNullException("Activate Profile Cannot be Null");
-                }
-
-                string profileDomain = "crm:" + activeProfile + ":domain";
-
-                return ConfigurationManager.AppSettings[profileDomain];
-
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Error retrieving profile domain " + ex.ToString());
-                return string.Empty;
-            }
-        }
-
-        private string GetProfilePassword()
-        {
-            try
-            {
-                string activeProfile = ConfigurationManager.AppSettings["activeprofile"];
-
-                if (string.IsNullOrEmpty(activeProfile))
-                {
-                    throw new ArgumentNullException("Activate Profile Cannot be Null");
-                }
-
-                string profilePassword = "crm:" + activeProfile + ":password";
-
-                return ConfigurationManager.AppSettings[profilePassword];
-
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Error retrieving profile password " + ex.ToString());
-                return string.Empty;
-            }
-
-        }
-
-        private string GetProfileUri()
-        {
-            try
-            {
-                string activeProfile = ConfigurationManager.AppSettings["activeprofile"];
-
-                if (string.IsNullOrEmpty(activeProfile))
-                {
-                    throw new ArgumentNullException("Activate Profile Cannot be Null");
-                }
-
-                string profileUri = "crm:" + activeProfile + ":organizationuri";
-
-                return ConfigurationManager.AppSettings[profileUri];
-
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Error retrieving profile password " + ex.ToString());
-                return string.Empty;
-            }
-        }
-
-        #endregion
 
     }
 }

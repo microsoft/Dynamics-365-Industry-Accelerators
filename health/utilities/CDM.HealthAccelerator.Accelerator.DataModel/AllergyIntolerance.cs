@@ -137,7 +137,7 @@ namespace CDM.HealthAccelerator.DataModel
             Type = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.AllergyIntolerance_Type>();
         }
 
-        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword, string cdsEmailDomain)
+        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
         {
             Guid allergyIntolernaceId = Guid.Empty;
 

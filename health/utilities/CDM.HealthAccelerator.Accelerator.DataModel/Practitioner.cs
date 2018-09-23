@@ -38,6 +38,8 @@ namespace CDM.HealthAccelerator.DataModel
     {
         #region Properties
 
+
+
         private List<PractitionerRole> roles = new List<PractitionerRole>();
         private List<PractitionerQualification> qualifications = new List<PractitionerQualification>();
         private PractitionerConfiguration practitionerConfiguration;
@@ -207,7 +209,7 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
-        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword, string cdsEmaildomain)
+        public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
         {
             Guid profileId = Guid.Empty;
 
@@ -264,7 +266,7 @@ namespace CDM.HealthAccelerator.DataModel
                     addContact.MobilePhone = MobilePhone;
                     addContact.Telephone2 = Telephone2;
                     addContact.Address1_Country = Address1Country;
-                    addContact.EMailAddress1 = FirstName + "." + LastName + "@" + cdsEmaildomain;
+                    addContact.EMailAddress1 = FirstName + "." + LastName + "@" + EmailAddressDomain;
                     addContact.Address1_Country = Address1Country;
                     addContact.Salutation = Salutation;
                     addContact.BirthDate = BirthDate;
@@ -333,7 +335,92 @@ namespace CDM.HealthAccelerator.DataModel
 
         public override Guid WriteToCDS(OrganizationServiceProxy _serviceProxy)
         {
-            return Guid.Empty;
+            Guid profileId = Guid.Empty;
+
+            try
+            {
+
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                HealthCDM.Contact addContact = new HealthCDM.Contact();
+
+                //Set standard atttributes (this could be done via reflection)
+                // but for now this is all we are setting
+                addContact.GenderCode = new OptionSetValue(GenderCode);
+                addContact.FirstName = FirstName;
+                addContact.LastName = LastName;
+                addContact.Address1_Line1 = Address1Line1;
+                addContact.Address1_City = Address1City;
+                addContact.Address1_StateOrProvince = Address1StateOrProvince;
+                addContact.Address1_PostalCode = Address1PostalCode;
+                addContact.Telephone1 = Telephone1;
+                addContact.MobilePhone = MobilePhone;
+                addContact.Telephone2 = Telephone2;
+                addContact.Address1_Country = Address1Country;
+                addContact.EMailAddress1 = FirstName + "." + LastName + "@" + EmailAddressDomain;
+                addContact.Address1_Country = Address1Country;
+                addContact.Salutation = Salutation;
+                addContact.BirthDate = BirthDate;
+                // set the primary language
+                addContact.msemr_Communication1Language = new EntityReference(HealthCDM.msemr_codeableconcept.EntityLogicalName, GetCodeableConceptId(_serviceProxy, PrimaryLanguageCode, (int)HealthCDMEnums.CodeableConcept_Type.Language));
+
+                addContact.msemr_ContactType = new OptionSetValue((int)HealthCDMEnums.Contact_Contacttype.Practitioner);
+
+                try
+                {
+                    profileId = _serviceProxy.Create(addContact);
+
+                    if (profileId != Guid.Empty)
+                    {
+                        ContactId = profileId.ToString();
+
+                        // now that we have the ContactId for this Practitioner we need
+                        // to create the roles we have and the qualifications
+
+                        foreach (PractitionerRole role in Roles)
+                        {
+                            role.PractitionerId = ContactId;
+
+                            try
+                            {
+                                role.WriteToCDS(_serviceProxy);
+                            }
+                            catch (Exception rex)
+                            {
+                                Console.WriteLine(rex.ToString());
+                            }
+                        }
+
+                        foreach (PractitionerQualification qualification in Qualifications)
+                        {
+                            qualification.PractitionerId = ContactId;
+
+                            try
+                            {
+                                qualification.WriteToCDS(_serviceProxy);
+                            }
+                            catch (Exception qex)
+                            {
+                                Console.WriteLine(qex.ToString());
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Contact Id == null");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+
+            return profileId;
         }
     }
 }

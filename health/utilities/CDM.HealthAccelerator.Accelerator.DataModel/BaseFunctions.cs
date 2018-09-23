@@ -34,7 +34,7 @@ namespace CDM.HealthAccelerator.DataModel
         public abstract void InitializeEntity();
 
         // Adding a method to be able to self-write to CDS
-        public abstract Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword, string cdsEmailDomain);
+        public abstract Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword);
 
         public abstract Guid WriteToCDS(OrganizationServiceProxy _serviceProxy);
 
@@ -71,7 +71,7 @@ namespace CDM.HealthAccelerator.DataModel
         /// <summary>
         /// Use this to help generate fake information for a contact
         /// </summary>
-        public static readonly Random RandomGenerator = new Random();
+        public static readonly Random BaseRandomGenerator = new Random();
 
         public static SampleDataCache.RandomDateTime birthDayRandomGenerator = new SampleDataCache.RandomDateTime(1955, 1, 1, new DateTime(2000, 1, 1));
     }
