@@ -657,13 +657,13 @@ namespace Microsoft.Crm.Sdk.Samples
                         && config.AuthFailureCount == 0)
                          
                     {
-                        try
-                        {
-                            config.UserPrincipalName = UserPrincipal.Current.UserPrincipalName;
-                            return null;
-                        }
-                        catch 
-                        {
+                        //try
+                        //{
+                        //    config.UserPrincipalName = UserPrincipal.Current.UserPrincipalName;
+                        //    return null;
+                        //}
+                        //catch 
+                        //{
                             config.UserPrincipalName = String.Empty;
                             if (config.EndpointType == AuthenticationProviderType.LiveId)
                                 Console.Write("\n Enter Microsoft account: ");
@@ -678,7 +678,7 @@ namespace Microsoft.Crm.Sdk.Samples
                             Console.Write(" Enter Password: ");
                             password = ReadPassword();
 
-                        }
+                        //}
 
                     }
                     // Otherwise request username and password.
