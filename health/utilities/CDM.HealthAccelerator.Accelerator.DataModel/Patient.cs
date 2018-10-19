@@ -6,24 +6,24 @@
 //  This source code is intended only as a supplement to Microsoft
 //  Development Tools and/or on-line documentation.  See these other
 //  materials for detailed information regarding Microsoft code samples.
-//
 //  THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 //  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 //  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //  PARTICULAR PURPOSE.
 // =====================================================================
-namespace CDM.HealthAccelerator.DataModel
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using Microsoft.Xrm.Sdk;
-    using Microsoft.Xrm.Sdk.Client;
-    using System.ServiceModel.Description;
-    using System.Net;
-    using Newtonsoft.Json;
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
+using System.ServiceModel.Description;
+using System.Net;
+using Newtonsoft.Json;
+namespace CDM.HealthAccelerator.DataModel//
+
+{
 
     /// <summary>
     /// Holder
@@ -33,7 +33,33 @@ namespace CDM.HealthAccelerator.DataModel
     {
         #region Patient Specific Attributes
 
+        //private MedicationPriceList priceList = new MedicationPriceList();
 
+        //private MedicineUoM uom = new MedicineUoM();
+
+        private List<Medication> products = new List<Medication>();
+
+        private List<PatientTask> tasks = new List<PatientTask>();
+
+        private List<Specimen> specimens = new List<Specimen>();
+
+        private List<Location> locations = new List<Location>();
+
+        private List<Observation> observations = new List<Observation>();
+
+        private List<CareTeamParticipant> careTeamParticipants = new List<CareTeamParticipant>();
+
+        private List<RiskAssessment> riskAssessments = new List<RiskAssessment>();
+
+        private List<MedicationAdministration> medicationAdminitrations = new List<MedicationAdministration>();
+
+        private List<CareTeam> careteams = new List<CareTeam>();
+
+        private List<CarePlan> careplans = new List<CarePlan>();
+
+        private List<Appointment> appointments = new List<Appointment>();
+
+        private List<Encounter> encounters = new List<Encounter>();
 
         private List<MedicationRequest> medicationRequests = new List<MedicationRequest>();
 
@@ -48,6 +74,8 @@ namespace CDM.HealthAccelerator.DataModel
         private List<NutritionOrder> nutritionOrders = new List<NutritionOrder>();
 
         private List<AllergyIntolerance> allergyIntolerances = new List<AllergyIntolerance>();
+
+        private List<EpisodeOfCare> episodesOfCare = new List<EpisodeOfCare>();
 
         private PatientConfiguration patientConfiguration;
 
@@ -245,6 +273,188 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
+        public List<EpisodeOfCare> EpisodesOfCare
+        {
+            get
+            {
+                return episodesOfCare;
+            }
+
+            set
+            {
+                episodesOfCare = value;
+            }
+        }
+
+        public List<Encounter> Encounters
+        {
+            get
+            {
+                return encounters;
+            }
+
+            set
+            {
+                encounters = value;
+            }
+        }
+
+        public List<Appointment> Appointments
+        {
+            get
+            {
+                return appointments;
+            }
+
+            set
+            {
+                appointments = value;
+            }
+        }
+
+        public List<CarePlan> Careplans
+        {
+            get
+            {
+                return careplans;
+            }
+
+            set
+            {
+                careplans = value;
+            }
+        }
+
+        public List<CareTeam> Careteams
+        {
+            get
+            {
+                return careteams;
+            }
+
+            set
+            {
+                careteams = value;
+            }
+        }
+
+        public List<RiskAssessment> RiskAssessments
+        {
+            get
+            {
+                return riskAssessments;
+            }
+
+            set
+            {
+                riskAssessments = value;
+            }
+        }
+
+        public List<CareTeamParticipant> CareTeamParticipants
+        {
+            get
+            {
+                return careTeamParticipants;
+            }
+
+            set
+            {
+                careTeamParticipants = value;
+            }
+        }
+
+        public List<Observation> Observations
+        {
+            get
+            {
+                return observations;
+            }
+
+            set
+            {
+                observations = value;
+            }
+        }
+
+        public List<Location> Locations
+        {
+            get
+            {
+                return locations;
+            }
+
+            set
+            {
+                locations = value;
+            }
+        }
+
+        public List<Specimen> Specimens
+        {
+            get
+            {
+                return specimens;
+            }
+
+            set
+            {
+                specimens = value;
+            }
+        }
+
+        public List<PatientTask> Tasks
+        {
+            get
+            {
+                return tasks;
+            }
+
+            set
+            {
+                tasks = value;
+            }
+        }
+
+        //public MedicineUoM Uom
+        //{
+        //    get
+        //    {
+        //        return uom;
+        //    }
+
+        //    set
+        //    {
+        //        uom = value;
+        //    }
+        //}
+
+        public List<Medication> Products
+        {
+            get
+            {
+                return products;
+            }
+
+            set
+            {
+                products = value;
+            }
+        }
+
+        //public MedicationPriceList PriceList
+        //{
+        //    get
+        //    {
+        //        return priceList;
+        //    }
+
+        //    set
+        //    {
+        //        priceList = value;
+        //    }
+        //}
+
         #endregion
 
         /// <summary>
@@ -302,12 +512,13 @@ namespace CDM.HealthAccelerator.DataModel
         {
             try
             {
-                SampleDataCache.InitializeFakeDataHelpers();
+                SampleDataCache.InitializeDataCache();
 
                 List<Profile> listPatients = new List<Profile>();
                 List<RelatedPerson> listRelatedPersons;
                 List<Practitioner> listPractitioners;
-
+                List<Organization> listOrganizations = null;
+               
                 //SampleDataCache.RandomDateTime birthDayrdt = new SampleDataCache.RandomDateTime(1955, 1, 1, new DateTime(2000, 1, 1));
 
                 for (int i = 0; i < profiles; i++)
@@ -317,16 +528,30 @@ namespace CDM.HealthAccelerator.DataModel
 
                     a.PatientConfiguration = ((PatientConfiguration)(configuration));
 
-                    int maleorfemale = SampleDataCache.RandomContactGenerator.Next(1, 100);
+                    int maleorfemale = SampleDataCache.SelectRandomItem.Next(1, 100);
 
-                    a.FirstName = maleorfemale < 50 ? SampleDataCache.Malenames[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.Malenames.Count - 1)] : SampleDataCache.Femalenames[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.Femalenames.Count - 1)];
-                    a.LastName = SampleDataCache.Lastnames[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.Lastnames.Count - 1)];
+                    a.FirstName = maleorfemale < 50 ? SampleDataCache.Malenames[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.Malenames.Count - 1)] : SampleDataCache.Femalenames[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.Femalenames.Count - 1)];
+                    a.LastName = SampleDataCache.Lastnames[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.Lastnames.Count - 1)];
 
-                    SampleDataCache.AddressInfo addressInfo = SampleDataCache.AddressInfos[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.AddressInfos.Count - 1)];
+                    SampleDataCache.AddressInfo addressInfo = SampleDataCache.AddressInfos[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.AddressInfos.Count - 1)];
 
                     // Now set the Emergency and Primary Contact etc
                     string practitionersfile = a.PatientConfiguration.PractionerFileName;
                     string relatedpersonsfile = a.PatientConfiguration.RelatedPersonsFileName;
+                    string locationsfile = a.patientConfiguration.LocationsFileName;
+                    string organizationsfile = a.patientConfiguration.AccountsFileName;
+
+                    if (!string.IsNullOrEmpty(locationsfile))
+                    {
+                        // this will get used in multiple places lower on
+                        a.Locations = Location.ImportProfiles(locationsfile);
+                    }
+
+                    if (!string.IsNullOrEmpty(organizationsfile))
+                    {
+                        // this will get used in multiple places lower on
+                        listOrganizations = Organization.ImportProfiles(organizationsfile);
+                    }
 
                     if (!string.IsNullOrEmpty(relatedpersonsfile))
                     {
@@ -334,14 +559,14 @@ namespace CDM.HealthAccelerator.DataModel
 
                         if (listRelatedPersons != null)
                         {
-                            Profile emergencyContact = listRelatedPersons[SampleDataCache.RandomContactGenerator.Next(0, listRelatedPersons.Count - 1)];
-                            Profile primaryContact = listRelatedPersons[SampleDataCache.RandomContactGenerator.Next(0, listRelatedPersons.Count - 1)];
+                            Profile emergencyContact = listRelatedPersons[SampleDataCache.SelectRandomItem.Next(0, listRelatedPersons.Count - 1)];
+                            Profile primaryContact = listRelatedPersons[SampleDataCache.SelectRandomItem.Next(0, listRelatedPersons.Count - 1)];
 
                             a.EmergencyContactId = emergencyContact.ContactId;
                             a.PrimaryContactId = primaryContact.ContactId;
 
-                            a.EmergencyContactRelationshipTypeId = SampleDataCache.RelatedPersonTypes[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.RelatedPersonTypes.Count - 1)];
-                            a.PrimaryContactRelationshipTypeId = SampleDataCache.RelatedPersonTypes[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.RelatedPersonTypes.Count - 1)];
+                            a.EmergencyContactRelationshipTypeId = SampleDataCache.RelatedPersonTypes[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.RelatedPersonTypes.Count - 1)];
+                            a.PrimaryContactRelationshipTypeId = SampleDataCache.RelatedPersonTypes[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.RelatedPersonTypes.Count - 1)];
                         }
                     }
 
@@ -351,7 +576,7 @@ namespace CDM.HealthAccelerator.DataModel
 
                         if (listPractitioners != null)
                         {
-                            Profile primaryPractitioner = listPractitioners[SampleDataCache.RandomContactGenerator.Next(0, listPractitioners.Count - 1)];
+                            Profile primaryPractitioner = listPractitioners[SampleDataCache.SelectRandomItem.Next(0, listPractitioners.Count - 1)];
 
                             a.PrimaryPractitionerId = primaryPractitioner.ContactId;
                         }
@@ -392,15 +617,31 @@ namespace CDM.HealthAccelerator.DataModel
                         for (int iDevice = 0; iDevice < a.PatientConfiguration.DeviceCount; iDevice++)
                         {
                             Device device = new Device();
+
+                            if (a.Locations != null)
+                            {
+                                Location location = a.Locations[SampleDataCache.SelectRandomItem.Next(0, a.Locations.Count - 1)];
+
+                                device.LocationId = location.LocationId;
+                            }
+
                             a.Devices.Add(device);
                         }
                     }
-
+                
                     if (a.PatientConfiguration.ProcedureCount > 0)
                     {
                         for (int iProcedure = 0; iProcedure < a.PatientConfiguration.ProcedureCount; iProcedure++)
                         {
                             Procedure procedure = new Procedure();
+
+                            if (a.Locations != null)
+                            {
+                                Location location = a.Locations[SampleDataCache.SelectRandomItem.Next(0, a.Locations.Count - 1)];
+
+                                procedure.LocationId = location.LocationId;
+                            }
+
                             a.Procedures.Add(procedure);
                         }
                     }
@@ -414,6 +655,7 @@ namespace CDM.HealthAccelerator.DataModel
                         }
                     }
 
+                    // COMPLETE THIS ONE THE ENCOUNTERS ARE DONE
                     if (a.PatientConfiguration.MedicationCount > 0)
                     {
                         for (int iMedication = 0; iMedication < a.PatientConfiguration.MedicationCount; iMedication++)
@@ -423,7 +665,113 @@ namespace CDM.HealthAccelerator.DataModel
                         }
                     }
 
-                    a.PrimaryLanguageCode = SampleDataCache.Languages[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.Languages.Count - 1)];
+                    if (a.PatientConfiguration.EpisodesOfCareCount > 0)
+                    {
+                        for (int iEpisode = 0; iEpisode < a.PatientConfiguration.EpisodesOfCareCount; iEpisode++)
+                        {
+                            EpisodeOfCare episode = new EpisodeOfCare();
+
+                            episode.PractitionerId = a.PrimaryPractitionerId;
+                            episode.Description = a.FullName + " - Episode of Care";
+                            episode.AccountId = listOrganizations[SampleDataCache.SelectRandomItem.Next(0, listOrganizations.Count -1)].OrganizationId;
+
+                            a.EpisodesOfCare.Add(episode);
+                        }
+                    }
+
+                    if (a.PatientConfiguration.EncountersCount > 0)
+                    {
+                        for (int iEncounter = 0; iEncounter < a.PatientConfiguration.EncountersCount; iEncounter++)
+                        {
+                            Encounter encounter = new Encounter();
+
+                            if (a.Locations != null)
+                            {
+                                Location location = a.Locations[SampleDataCache.SelectRandomItem.Next(0, a.Locations.Count - 1)];
+
+                                encounter.HospitalizationOriginId = location.LocationId;
+                                encounter.HospitalizationDestinationId = location.LocationId;
+                            }
+
+                            a.Encounters.Add(encounter);
+                        }
+                    }
+
+                    if (a.PatientConfiguration.AppointmentCount > 0)
+                    {
+                        for (int iAppointment = 0; iAppointment < a.PatientConfiguration.AppointmentCount; iAppointment++)
+                        {
+                            Appointment appointment = new Appointment();
+
+
+                            if (a.Locations != null)
+                            {
+                                Location location = a.Locations[SampleDataCache.SelectRandomItem.Next(0, a.Locations.Count - 1)];
+
+                                appointment.LocationId = location.LocationId;
+                            }
+
+                            appointment.PractitionerId = a.PrimaryPractitionerId;
+
+                            a.Appointments.Add(appointment);
+                        }
+                    }
+
+                    if (a.PatientConfiguration.CarePlanCount > 0)
+                    {
+                        CarePlan careplan = new CarePlan();
+
+                        a.Careplans.Add(careplan);
+                    }
+
+
+                    if (a.PatientConfiguration.CareTeamCount > 0)
+                    {
+                        CareTeam team = new CareTeam();
+
+                        a.Careteams.Add(team);
+                    }
+
+                    if (a.PatientConfiguration.RiskAssessmentCount > 0)
+                    {
+                        for (int iAssessment = 0; iAssessment < a.PatientConfiguration.RiskAssessmentCount; iAssessment++)
+                        {
+                            RiskAssessment assessment = new RiskAssessment();
+
+                            a.RiskAssessments.Add(assessment);
+                        }
+                    }
+
+                    if (a.PatientConfiguration.SpecimenCount > 0)
+                    {
+                        for (int iSpecimen = 0; iSpecimen < a.PatientConfiguration.SpecimenCount; iSpecimen++)
+                        {
+                            Specimen specimen = new DataModel.Specimen();
+                            a.Specimens.Add(specimen);
+                        }
+                    }
+
+                    if (a.PatientConfiguration.TaskCount > 0)
+                    {
+                        for (int iTask = 0; iTask < a.PatientConfiguration.TaskCount; iTask++)
+                        {
+                            PatientTask task = new PatientTask();
+                            a.Tasks.Add(task);
+                        }
+                    }
+
+                    if (a.PatientConfiguration.ProductCount > 0)
+                    {
+                        for (int iProduct = 0; iProduct < a.PatientConfiguration.ProductCount; iProduct++)
+                        {
+                            Medication product = new Medication();
+                            a.Products.Add(product);
+                        }
+                    }
+
+                    a.PrimaryLanguageCode = SampleDataCache.CodeableConcepts[HealthCDMEnums.CodeableConcept_Type.Language.ToString()]
+                        .Values.ElementAt(SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.CodeableConcepts[HealthCDMEnums.CodeableConcept_Type.Language.ToString()]
+                        .Values.Count - 1)).Key;
 
 
                     a.Address1City = addressInfo.City;
@@ -434,12 +782,12 @@ namespace CDM.HealthAccelerator.DataModel
                     a.Telephone2 = addressInfo.Areacode + "-" + addressInfo.Telephone; //(home)
                     a.Address1PostalCode = addressInfo.Zipcode;
                     a.Address1StateOrProvince = addressInfo.State;
-                    a.Age = SampleDataCache.RandomContactGenerator.Next(18, 100);
+                    a.Age = SampleDataCache.SelectRandomItem.Next(18, 100);
                     a.EmailAddress1 = a.FirstName + "_" + a.LastName + "@testlive.com";
                     a.FullName = a.FirstName + " " + a.LastName;
                     a.GenderCode = maleorfemale < 50 ? (int)ContactGenderCode.Male : (int)ContactGenderCode.Female;
                     a.Salutation = maleorfemale < 50 ? "Mr." : "Mrs.";
-                    a.CDMContactType = ContactType.Patient;
+                    a.CDMContactType = ProfileType.Patient;
                     a.PatientMedicalNumber = GenerateMedicalNumber();
                     a.BirthDate = birthDayRandomGenerator.Next();
 
@@ -496,135 +844,7 @@ namespace CDM.HealthAccelerator.DataModel
                     //enable using proxy types
                     _serviceProxy.EnableProxyTypes();
 
-                    HealthCDM.Contact addContact = new HealthCDM.Contact();
-
-                    //Set standard atttributes (this could be done via reflection)
-                    // but for now this is all we are setting
-                    addContact.GenderCode = new OptionSetValue(GenderCode);
-                    addContact.FirstName = FirstName;
-                    addContact.LastName = LastName;
-                    addContact.Address1_Line1 = Address1Line1;
-                    addContact.Address1_City = Address1City;
-                    addContact.Address1_StateOrProvince = Address1StateOrProvince;
-                    addContact.Address1_PostalCode = Address1PostalCode;
-                    addContact.Telephone1 = Telephone1;
-                    addContact.MobilePhone = MobilePhone;
-                    addContact.Telephone2 = Telephone2;
-                    addContact.Address1_Country = Address1Country;
-                    addContact.EMailAddress1 = FirstName + "." + LastName + "@" + EmailAddressDomain;
-                    addContact.Address1_Country = Address1Country;
-                    addContact.Salutation = Salutation;
-                    addContact.BirthDate = BirthDate;
-                    // set the primary language
-                    addContact.msemr_Communication1Language = new EntityReference(HealthCDM.msemr_codeableconcept.EntityLogicalName, GetCodeableConceptId(_serviceProxy, PrimaryLanguageCode, (int)HealthCDMEnums.CodeableConcept_Type.Language));
-
-                    addContact.msemr_ContactType = new OptionSetValue((int)HealthCDMEnums.Contact_Contacttype.Patient);
-
-                    // Set the Primary Practitioner, Emergency Contact & Primary Contacts
-                    if (!string.IsNullOrEmpty(PrimaryPractitionerId))
-                    {
-                        addContact.msemr_GeneralPractioner = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse(PrimaryPractitionerId));
-                    }
-
-                    if (!string.IsNullOrEmpty(EmergencyContactId))
-                    {
-                        addContact.msemr_Contact1 = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse(EmergencyContactId));
-                        addContact.msemr_Contact1Relationship = new EntityReference(HealthCDM.msemr_codeableconcept.EntityLogicalName, GetCodeableConceptId(_serviceProxy, EmergencyContactRelationshipTypeId, (int)HealthCDMEnums.CodeableConcept_Type.PatientRelationshipType));
-                    }
-
-                    if (!string.IsNullOrEmpty(PrimaryContactId))
-                    {
-                        addContact.msemr_Contact2 = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse(PrimaryContactId));
-                        addContact.msemr_Contact2Relationship = new EntityReference(HealthCDM.msemr_codeableconcept.EntityLogicalName, GetCodeableConceptId(_serviceProxy, PrimaryContactRelationshipTypeId, (int)HealthCDMEnums.CodeableConcept_Type.PatientRelationshipType));
-                    }
-
-                    addContact.msemr_MedicalRecordNumber = PatientMedicalNumber;
-
-                    try
-                    {
-                        profileId = _serviceProxy.Create(addContact);
-
-                        if (profileId != Guid.Empty)
-                        {
-                            ContactId = profileId.ToString();
-
-                            // Add alergies to patient
-                            if (AllergyIntolerances.Count > 0)
-                            {
-                                foreach (AllergyIntolerance ai in AllergyIntolerances)
-                                {
-                                    ai.PatientId = ContactId;
-                                    ai.WriteToCDS(_serviceProxy);
-                                }
-                            }
-
-                            if (NutritionOrders.Count > 0)
-                            {
-                                foreach(NutritionOrder no in NutritionOrders)
-                                {
-                                    no.Patient = ContactId;
-                                    no.Practitioner = PrimaryPractitionerId;
-                                    no.WriteToCDS(_serviceProxy);
-                                }
-                            }
-
-                            if (Conditions.Count > 0)
-                            {
-                                foreach (Condition condition in Conditions)
-                                {
-                                    condition.PatientId = ContactId;
-                                    condition.PractitionerId = PrimaryPractitionerId;
-                                    condition.WriteToCDS(_serviceProxy);
-                                }
-                            }
-
-                            if (Devices.Count > 0)
-                            {
-                                foreach (Device device in Devices)
-                                {
-                                    device.PatientId = ContactId;
-                                    device.WriteToCDS(_serviceProxy);
-                                }
-                            }
-
-                            if (Procedures.Count > 0)
-                            {
-                                foreach (Procedure procedure in Procedures)
-                                {
-                                    procedure.PatientId = ContactId;
-                                    procedure.WriteToCDS(_serviceProxy);
-                                }
-                            }
-
-                            if (ReferralRequests.Count > 0)
-                            {
-                                foreach (ReferralRequest request in ReferralRequests)
-                                {
-                                    request.PatientId = ContactId;
-                                    request.PractitionerId = primaryPractitionerId;
-                                    request.WriteToCDS(_serviceProxy);
-                                }
-                            }
-
-                            if (MedicationRequests.Count > 0)
-                            {
-                                foreach (MedicationRequest request in MedicationRequests)
-                                {
-                                    request.PatientId = ContactId;
-                                    request.PractitionerId = primaryPractitionerId;
-                                    request.WriteToCDS(_serviceProxy);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("Contact Id == null");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.ToString());
-                    }
+                    profileId = WriteToCDS(_serviceProxy);
                 }
             }
             catch (Exception ex)
@@ -694,6 +914,8 @@ namespace CDM.HealthAccelerator.DataModel
                     {
                         ContactId = profileId.ToString();
 
+                        #region remap section due to dependencies
+
                         // Add alergies to patient
                         if (AllergyIntolerances.Count > 0)
                         {
@@ -704,41 +926,42 @@ namespace CDM.HealthAccelerator.DataModel
                             }
                         }
 
-                        if (NutritionOrders.Count > 0)
-                        {
-                            foreach (NutritionOrder no in NutritionOrders)
-                            {
-                                no.Patient = ContactId;
-                                no.Practitioner = PrimaryPractitionerId;
-                                no.WriteToCDS(_serviceProxy);
-                            }
-                        }
-
-                        if (Conditions.Count > 0)
-                        {
-                            foreach (Condition condition in Conditions)
-                            {
-                                condition.PatientId = ContactId;
-                                condition.PractitionerId = PrimaryPractitionerId;
-                                condition.WriteToCDS(_serviceProxy);
-                            }
-                        }
-
                         if (Devices.Count > 0)
                         {
                             foreach (Device device in Devices)
                             {
+                                Location location = Locations[SampleDataCache.SelectRandomItem.Next(0, Locations.Count - 1)];
+
                                 device.PatientId = ContactId;
+                                device.LocationId = location.LocationId;
                                 device.WriteToCDS(_serviceProxy);
                             }
                         }
 
-                        if (Procedures.Count > 0)
+
+                        if (Appointments.Count > 0)
                         {
-                            foreach (Procedure procedure in Procedures)
+                            foreach (Appointment appointment in Appointments)
                             {
-                                procedure.PatientId = ContactId;
-                                procedure.WriteToCDS(_serviceProxy);
+                                Location location = Locations[SampleDataCache.SelectRandomItem.Next(0, Locations.Count - 1)];
+
+                                appointment.Description = FullName + " - Appointment";
+                                appointment.PatientId = ContactId;
+                                appointment.LocationId = location.LocationId;
+                                appointment.AppointmentId = appointment.WriteToCDS(_serviceProxy).ToString();
+                            }
+                        }
+
+                        if (Encounters.Count > 0)
+                        {
+                            foreach (Encounter encounter in Encounters)
+                            {
+                                Appointment appointment = Appointments[SampleDataCache.SelectRandomItem.Next(0, Appointments.Count - 1)];
+
+                                encounter.Name = FullName +" - Patient Encounter";
+                                encounter.SubjectPatientId = ContactId;
+                                encounter.AppointmentEmrId = appointment.AppointmentId;
+                                encounter.EncounterId = encounter.WriteToCDS(_serviceProxy).ToString();
                             }
                         }
 
@@ -746,25 +969,243 @@ namespace CDM.HealthAccelerator.DataModel
                         {
                             foreach (ReferralRequest request in ReferralRequests)
                             {
+                                Encounter encounter = Encounters[SampleDataCache.SelectRandomItem.Next(0, Encounters.Count - 1)];
+                                Appointment appointment = Appointments[SampleDataCache.SelectRandomItem.Next(0, Appointments.Count - 1)];
+
                                 request.PatientId = ContactId;
                                 request.PractitionerId = primaryPractitionerId;
+                                request.EncounterId = encounter.EncounterId;
+                                request.AppointmentId = appointment.AppointmentId;
                                 request.WriteToCDS(_serviceProxy);
                             }
                         }
+
+                        if (NutritionOrders.Count > 0)
+                        {
+                            foreach (NutritionOrder no in NutritionOrders)
+                            {
+                                Encounter encounter = Encounters[SampleDataCache.SelectRandomItem.Next(0, Encounters.Count - 1)];
+
+                                no.PatientId = ContactId;
+                                no.PractitionerId = PrimaryPractitionerId;
+                                no.EncounterId = encounter.EncounterId;
+                                no.WriteToCDS(_serviceProxy);
+                            }
+                        }
+
+                        //if (Products.Count > 0)
+                        //{
+                        //    // we need the Uomid/groupid first
+                        //    Uom.WriteToCDS(_serviceProxy);
+
+                        //    foreach (Medication product in Products)
+                        //    {
+                        //        product.UomId = uom.UomId;
+                        //        product.UnitGroupId = uom.GroupId;
+                        //        product.Subject = "Sample Product " + GenerateRandomNumber();
+                        //        product.WriteToCDS(_serviceProxy);
+                        //    }
+
+                        //    PriceList.Products = products;
+                        //    PriceList.GroupId = uom.GroupId;
+                        //    PriceList.UomId = uom.UomId;
+
+                        //    PriceList.WriteToCDS(_serviceProxy);
+                        //}
 
                         if (MedicationRequests.Count > 0)
                         {
                             foreach (MedicationRequest request in MedicationRequests)
                             {
+                                Encounter encounter = Encounters[SampleDataCache.SelectRandomItem.Next(0, Encounters.Count - 1)];
+                                Medication product = Products[SampleDataCache.SelectRandomItem.Next(0, Products.Count - 1)];
+
                                 request.PatientId = ContactId;
                                 request.PractitionerId = primaryPractitionerId;
+                                request.MedicationTypePreference = string.Empty; // This is the PRODUCT reference which we don't have yet
+                                request.EncounterId = encounter.EncounterId;
+                                request.MedicationTypePreference = product.MedicationId;
                                 request.WriteToCDS(_serviceProxy);
+
+                                MedicationAdministration admin = new DataModel.MedicationAdministration();
+
+                                admin.PatientId = ContactId;
+                                admin.EncounterId = encounter.EncounterId;
+                                admin.Name = FullName + " - medication  administration";
+                                admin.MedicationAdministrationId = admin.WriteToCDS(_serviceProxy).ToString();
+
+                                medicationAdminitrations.Add(admin);
                             }
                         }
+
+                        if (EpisodesOfCare.Count > 0)
+                        {
+                            foreach (EpisodeOfCare request in EpisodesOfCare)
+                            {
+                                Encounter encounter = Encounters[SampleDataCache.SelectRandomItem.Next(0, Encounters.Count - 1)];
+
+                                request.PatientId = ContactId;
+                                request.PractitionerId = primaryPractitionerId;
+                                request.Description = FullName + " - Episode of Care";
+                                request.EncounterId = encounter.EncounterId;
+                                request.EpisodeOfCareId = request.WriteToCDS(_serviceProxy).ToString();
+
+                                // now we will add in the Observations
+                                Device device = Devices[SampleDataCache.SelectRandomItem.Next(0, Devices.Count - 1)];
+                                Location location = Locations[SampleDataCache.SelectRandomItem.Next(0, Locations.Count - 1)];
+
+                                Observation observation = new Observation();
+
+                                observation.PatientId = ContactId;
+                                observation.Description = FullName + " - Observation";
+                                observation.EpisodeOfCareId = request.EpisodeOfCareId;
+                                observation.LocationId = location.LocationId;
+                                observation.DeviceId = device.DeviceId;
+
+                                observation.WriteToCDS(_serviceProxy);
+
+                                Observations.Add(observation);
+
+                            }
+                        }
+
+                        if (Careplans.Count > 0)
+                        {
+                            foreach (CarePlan plan in Careplans)
+                            {
+                                Encounter encounter = Encounters[SampleDataCache.SelectRandomItem.Next(0, Encounters.Count - 1)];
+
+                                plan.PatientId = ContactId;
+                                plan.EncounterId = encounter.EncounterId;
+                                plan.Description = FullName + " - Description";
+                                plan.Title = FullName + " - Care Plan;";
+                                plan.CarePlanId = plan.WriteToCDS(_serviceProxy).ToString();
+                            }
+                        }
+
+                        if (Conditions.Count > 0)
+                        {
+                            foreach (Condition condition in Conditions)
+                            {
+                                Appointment appointment = Appointments[SampleDataCache.SelectRandomItem.Next(0, Appointments.Count - 1)];
+                                CarePlan careplan = Careplans[SampleDataCache.SelectRandomItem.Next(0, Careplans.Count - 1)];
+
+                                condition.PatientId = ContactId;
+                                condition.PractitionerId = PrimaryPractitionerId;
+                                condition.AsserterId = ContactId;
+                                condition.AppointmentId = appointment.AppointmentId;
+                                condition.CarePlanId = careplan.CarePlanId;
+                                condition.WriteToCDS(_serviceProxy);
+                            }
+                        }
+
+                        if (RiskAssessments.Count > 0)
+                        {
+                            foreach (RiskAssessment assessment in RiskAssessments)
+                            {
+                                Encounter encounter = Encounters[SampleDataCache.SelectRandomItem.Next(0, Encounters.Count - 1)];
+                                Condition condition = Conditions[SampleDataCache.SelectRandomItem.Next(0, Conditions.Count - 1)];
+
+                                assessment.PatientId = ContactId;
+                                assessment.PractitionerId = PrimaryPractitionerId;
+                                assessment.ConditionId = condition.ConditionId;
+                                assessment.EncounterId = encounter.EncounterId;
+                                assessment.Name = FullName + " - Risk Assessment";
+                                assessment.WriteToCDS(_serviceProxy);
+                            }
+                        }
+
+                        if (Procedures.Count > 0)
+                        {
+                            foreach (Procedure procedure in Procedures)
+                            {
+                                Encounter encounter = Encounters[SampleDataCache.SelectRandomItem.Next(0, Encounters.Count - 1)];
+
+                                procedure.EncounterId = encounter.EncounterId;
+                                procedure.PatientId = ContactId;
+                                procedure.WriteToCDS(_serviceProxy);
+                            }
+                        }
+
+                        if (Careteams.Count > 0)
+                        {
+                            foreach (CareTeam team in Careteams)
+                            {
+                                team.PatientId = ContactId;
+                                team.Name = addContact.FullName + " - Care Team;";
+                                team.CareTeamId = team.WriteToCDS(_serviceProxy).ToString();
+
+                                // for each care team we will add the participants
+                                CareTeamParticipant patient = new CareTeamParticipant();
+                                CareTeamParticipant relatedperson = new CareTeamParticipant();
+                                CareTeamParticipant practitioner = new CareTeamParticipant();
+
+                                patient.CareTeamId = team.CareTeamId;
+                                relatedperson.CareTeamId = team.CareTeamId;
+                                practitioner.CareTeamId = team.CareTeamId;
+
+                                patient.PatientId = ContactId;
+
+                                relatedperson.RelatedPersonId = PrimaryContactId;
+                                relatedperson.PatientId = ContactId;
+
+                                practitioner.PractitionerId = PrimaryPractitionerId;
+                                practitioner.PatientId = ContactId;
+
+                                patient.MemberType = (int)HealthCDMEnums.CareTeamParticipant_Membertype.Patient;
+                                relatedperson.MemberType = (int)HealthCDMEnums.CareTeamParticipant_Membertype.RelationPerson;
+                                practitioner.MemberType = (int)HealthCDMEnums.CareTeamParticipant_Membertype.Practitioner;
+
+                                patient.WriteToCDS(_serviceProxy);
+                                relatedperson.WriteToCDS(_serviceProxy);
+                                practitioner.WriteToCDS(_serviceProxy);
+
+                                CareTeamParticipants.Add(patient);
+                                CareTeamParticipants.Add(relatedperson);
+                                CareTeamParticipants.Add(practitioner);
+
+                                //patient.RoleId = SampleDataCache.CodeableConcepts[HealthCDMEnums.CodeableConcept_Type.ParticipantRole.ToString()]
+                                //    .Values.ElementAt(SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.CodeableConcepts[HealthCDMEnums.CodeableConcept_Type.ParticipantRole.ToString()]
+                                //    .Values.Count - 1)).Key;
+
+                            }
+                        }
+
+                        if (Specimens.Count > 0)
+                        {
+                            foreach(Specimen specimen in Specimens)
+                            {
+                                Device device = Devices[SampleDataCache.SelectRandomItem.Next(0, Devices.Count - 1)];
+
+                                specimen.PatientId = ContactId;
+                                specimen.PractitionerId = PrimaryPractitionerId;
+                                specimen.DeviceId = device.DeviceId;
+                                specimen.Name = FullName + " - Specimen";
+                                specimen.WriteToCDS(_serviceProxy);
+                            }
+                        }
+
+                        if (Tasks.Count > 0)
+                        {
+                            foreach (PatientTask task in Tasks)
+                            {
+                                Encounter encounter = Encounters[SampleDataCache.SelectRandomItem.Next(0, Encounters.Count - 1)];
+
+                                task.OwnerPatientId = ContactId;
+                                task.RequestingPatientId = ContactId;
+                                task.Subject = FullName + " - Task";
+                                task.OwnerPractitionerId = PrimaryPractitionerId;
+                                task.RequestingPractitionerId = PrimaryPractitionerId;
+                                task.EncounterId = encounter.EncounterId;
+                                task.WriteToCDS(_serviceProxy);
+                            }
+                        }
+
+                        #endregion
                     }
                     else
                     {
-                        throw new Exception("Contact Id == null");
+                    throw new Exception("Contact Id == null");
                     }
                 }
                 catch (Exception ex)
@@ -784,15 +1225,15 @@ namespace CDM.HealthAccelerator.DataModel
         {
             string medicalnumber = string.Empty;
 
-            medicalnumber = "MRN" + (SampleDataCache.RandomContactGenerator.Next(0, 9)).ToString()
-                + (SampleDataCache.RandomContactGenerator.Next(0, 9)).ToString()
-                + (SampleDataCache.RandomContactGenerator.Next(0, 9)).ToString()
-                + (SampleDataCache.RandomContactGenerator.Next(0, 9)).ToString()
+            medicalnumber = "MRN" + (SampleDataCache.SelectRandomItem.Next(0, 9)).ToString()
+                + (SampleDataCache.SelectRandomItem.Next(0, 9)).ToString()
+                + (SampleDataCache.SelectRandomItem.Next(0, 9)).ToString()
+                + (SampleDataCache.SelectRandomItem.Next(0, 9)).ToString()
                 + "-"
-                + (SampleDataCache.RandomContactGenerator.Next(0, 9)).ToString()
-                + (SampleDataCache.RandomContactGenerator.Next(0, 9)).ToString()
-                + (SampleDataCache.RandomContactGenerator.Next(0, 9)).ToString()
-                + (SampleDataCache.RandomContactGenerator.Next(0, 9)).ToString();
+                + (SampleDataCache.SelectRandomItem.Next(0, 9)).ToString()
+                + (SampleDataCache.SelectRandomItem.Next(0, 9)).ToString()
+                + (SampleDataCache.SelectRandomItem.Next(0, 9)).ToString()
+                + (SampleDataCache.SelectRandomItem.Next(0, 9)).ToString();
 
             return medicalnumber;
         }

@@ -32,12 +32,15 @@ namespace CDM.HealthAccelerator.DataModel
             InitializeEntity();
         }
 
-        public NutritionOrder(string patientId, string practitionerId)
+        public NutritionOrder(string patientId, string practitionerId, string encounterId)
         {
             patient = patientId;
             practitioner = practitionerId;
+            EncounterId = encounterId;
             InitializeEntity();
         }
+
+        #region Attributes
 
         private string nutritionOrderId;
         private string practitioner;
@@ -45,8 +48,13 @@ namespace CDM.HealthAccelerator.DataModel
         private string orderName;
         private DateTime orderDateTime;
         private int orderStatus;
+        private string nutritioOrderNumber;
+        private int maxVolumeToDeliver;
+        private int caloricDensity;
+        private string encounterId;
 
-        public string Practitioner
+
+        public string PractitionerId
         {
             get
             {
@@ -59,7 +67,7 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
-        public string Patient
+        public string PatientId
         {
             get
             {
@@ -124,16 +132,76 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
+        public string NutritioOrderNumber
+        {
+            get
+            {
+                return nutritioOrderNumber;
+            }
+
+            set
+            {
+                nutritioOrderNumber = value;
+            }
+        }
+
+        public int MaxVolumeToDeliver
+        {
+            get
+            {
+                return maxVolumeToDeliver;
+            }
+
+            set
+            {
+                maxVolumeToDeliver = value;
+            }
+        }
+
+        public int CaloricDensity
+        {
+            get
+            {
+                return caloricDensity;
+            }
+
+            set
+            {
+                caloricDensity = value;
+            }
+        }
+
+        public string EncounterId
+        {
+            get
+            {
+                return encounterId;
+            }
+
+            set
+            {
+                encounterId = value;
+            }
+        }
+
+        #endregion
+
         public override void InitializeEntity()
         {
-            SampleDataCache.RandomDateTime rdt = new SampleDataCache.RandomDateTime(2017, 1, 1, DateTime.Today);
+            SampleDataCache.GenerateRandomDateTime rdt = new SampleDataCache.GenerateRandomDateTime(2017, 1, 1, DateTime.Today);
 
-            orderName = SampleDataCache.NutrionOrders[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.NutrionOrders.Count - 1)];
+            orderName = SampleDataCache.NutrionOrders[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.NutrionOrders.Count - 1)];
 
             DateTime requestedDateTime = rdt.Next();
             orderDateTime = requestedDateTime;
 
             OrderStatus = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.NutritionOrder_Status>();
+
+            NutritioOrderNumber = GenerateRandomNumber(8);
+
+            MaxVolumeToDeliver = int.Parse(GenerateRandomNumber(1));
+
+            CaloricDensity = int.Parse(GenerateRandomNumber(2));
 
         }
 
@@ -179,32 +247,7 @@ namespace CDM.HealthAccelerator.DataModel
                     //enable using proxy types
                     _serviceProxy.EnableProxyTypes();
 
-                    HealthCDM.msemr_nutritionorder addNutritionOrder = new HealthCDM.msemr_nutritionorder();
-
-                    addNutritionOrder.msemr_Patient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((Patient)));
-                    addNutritionOrder.msemr_Orderer = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((Practitioner)));
-                    addNutritionOrder.msemr_name = OrderName;
-                    addNutritionOrder.msemr_DateTime = OrderDateTime;
-                    addNutritionOrder.msemr_Status = new OptionSetValue(OrderStatus);
-
-                    try
-                    {
-                        nutritionId = _serviceProxy.Create(addNutritionOrder);
-
-                        if (nutritionId != Guid.Empty)
-                        {
-                            NutritionOrderId = nutritionOrderId.ToString();
-                            Console.WriteLine("Created Nutrition [" + NutritionOrderId + "] for Patient [" + Patient + "]");
-                        }
-                        else
-                        {
-                            throw new Exception("NutritionId == null");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.ToString());
-                    }
+                    nutritionId = WriteToCDS(_serviceProxy);
                 }
             }
             catch (Exception ex)
@@ -221,11 +264,14 @@ namespace CDM.HealthAccelerator.DataModel
 
             HealthCDM.msemr_nutritionorder addNutritionOrder = new HealthCDM.msemr_nutritionorder();
 
-            addNutritionOrder.msemr_Patient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((Patient)));
-            addNutritionOrder.msemr_Orderer = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((Practitioner)));
+            addNutritionOrder.msemr_Patient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PatientId)));
+            addNutritionOrder.msemr_Orderer = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PractitionerId)));
             addNutritionOrder.msemr_name = OrderName;
             addNutritionOrder.msemr_DateTime = OrderDateTime;
             addNutritionOrder.msemr_Status = new OptionSetValue(OrderStatus);
+            addNutritionOrder.msemr_CaloricDensity = caloricDensity;
+            addNutritionOrder.msemr_MaxVolumetoDeliver = maxVolumeToDeliver;
+            addNutritionOrder.msemr_Encounter = new EntityReference(HealthCDM.msemr_encounter.EntityLogicalName, Guid.Parse(EncounterId));
 
             try
             {
@@ -234,7 +280,7 @@ namespace CDM.HealthAccelerator.DataModel
                 if (nutritionId != Guid.Empty)
                 {
                     NutritionOrderId = nutritionId.ToString();
-                    Console.WriteLine("Created Nutrition [" + NutritionOrderId + "] for Patient [" + Patient + "]");
+                    Console.WriteLine("Created Nutrition [" + NutritionOrderId + "] for Patient [" + PatientId + "]");
                 }
                 else
                 {
@@ -247,11 +293,6 @@ namespace CDM.HealthAccelerator.DataModel
             }
 
             return nutritionId;
-        }
-
-        public static void ExportToJson(string filename, List<Profile> profiles)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -35,20 +35,20 @@ namespace CDM.HealthAccelerator.GenerateSampleData
 
         #region Properties
 
-        private Queue<Profile> incomingContacts = new Queue<Profile>();
+        private Queue<Profile> incomingProfiles = new Queue<Profile>();
         private List<Profile> outgoingContacts = new List<Profile>();
-        public Queue<Profile> IncomingContacts
+        public Queue<Profile> IncomingProfiles
         {
             get
             {
-                return incomingContacts;
+                return incomingProfiles;
             }
             set
             {
-                incomingContacts = value;
+                incomingProfiles = value;
             }
         }
-        public List<Profile> OutgoingContacts
+        public List<Profile> OutgoingProfiles
         {
             get
             {
@@ -56,7 +56,7 @@ namespace CDM.HealthAccelerator.GenerateSampleData
             }
         }
 
-        private Profile.ContactType contactType;
+        private Profile.ProfileType profileType;
 
         private string fileName;
 
@@ -106,16 +106,16 @@ namespace CDM.HealthAccelerator.GenerateSampleData
             }
         }
 
-        public Profile.ContactType ContactType
+        public Profile.ProfileType ProfileType
         {
             get
             {
-                return contactType;
+                return profileType;
             }
 
             set
             {
-                contactType = value;
+                profileType = value;
             }
         }
 
@@ -128,7 +128,7 @@ namespace CDM.HealthAccelerator.GenerateSampleData
         /// which it will then block (wait on)
         /// until they have completed or failed or shut down 
         /// </summary>
-        public string CreateContacts(OrganizationServiceProxy _service)
+        public string CreateProfiles(OrganizationServiceProxy _service)
         {
             // We need to create our file if it exists
             // or if it's already open, generate a second one.
@@ -154,8 +154,8 @@ namespace CDM.HealthAccelerator.GenerateSampleData
 
                             // create our thread and start it
                             // it's a parameterized query so pass in the proper values from above
-                            Thread clientthread = new Thread(() => CreateCDSContacts(_service));
-                            clientthread.Name = createthreads.ToString() + "-" + contactType.ToString();
+                            Thread clientthread = new Thread(() => CreateCDSProfile(_service));
+                            clientthread.Name = createthreads.ToString() + "-" + profileType.ToString();
                             clientthread.Start();
 
                             // add to our list of threads
@@ -188,30 +188,46 @@ namespace CDM.HealthAccelerator.GenerateSampleData
                         }
 
 
-                        switch (ContactType)
+                        switch (ProfileType)
                         {
-                        case Profile.ContactType.Standard:
+                        case Profile.ProfileType.Standard:
                                 {
-                                    Contact.ExportToJson(FileName, OutgoingContacts);    
+                                    Contact.ExportToJson(FileName, OutgoingProfiles);    
                                     break;
                                 }
-                            case Profile.ContactType.Patient:
+                            case Profile.ProfileType.Patient:
                                 {
-                                    Patient.ExportToJson(FileName, OutgoingContacts);
+                                    Patient.ExportToJson(FileName, OutgoingProfiles);
                                     break;
                                 }
-                            case Profile.ContactType.Practitioner:
+                            case Profile.ProfileType.Practitioner:
                                 {
-                                    Practitioner.ExportToJson(FileName, OutgoingContacts);
+                                    Practitioner.ExportToJson(FileName, OutgoingProfiles);
                                     break;
                                 }
-                            case Profile.ContactType.RelatedPerson:
+                            case Profile.ProfileType.RelatedPerson:
                                 {
-                                    RelatedPerson.ExportToJson(FileName, OutgoingContacts);
+                                    RelatedPerson.ExportToJson(FileName, OutgoingProfiles);
                                     break;
                                 }
-                        }
+                            case Profile.ProfileType.Organization:
+                                {
+                                    Organization.ExportToJson(FileName, OutgoingProfiles);
+                                    break;
+                                }
+                            case Profile.ProfileType.Location:
+                                {
+                                    Location.ExportToJson(FileName, OutgoingProfiles);
+                                    break;
+                                }
+                        case Profile.ProfileType.Medication:
+                            {
+                                Location.ExportToJson(FileName, OutgoingProfiles);
+                                break;
+                            }
                     }
+                }
+                
                     else
                     {
                         throw new ArgumentException("Invalid Client value. Client must be > 0");
@@ -226,26 +242,26 @@ namespace CDM.HealthAccelerator.GenerateSampleData
 
         }
 
-        private void CreateCDSContacts(OrganizationServiceProxy _service)
+        private void CreateCDSProfile(OrganizationServiceProxy _service)
         {
             try
             {
                 while (true)
                 {
-                    Profile cdsContact = GetContact();
+                    Profile cdsProfile = GetProfile();
 
-                    if (cdsContact == null)
+                    if (cdsProfile == null)
                     {
                         break;
                     }
 
-                    cdsContact.EmailAddressDomain = EmailDomain;
+                    cdsProfile.EmailAddressDomain = EmailDomain;
 
-                    Guid entityId = cdsContact.WriteToCDS(_service);
+                    Guid entityId = cdsProfile.WriteToCDS(_service);
 
                     if (entityId != Guid.Empty)
                     {
-                        Increment(cdsContact);
+                        Increment(cdsProfile);
                     }
                     else
                     {
@@ -261,6 +277,37 @@ namespace CDM.HealthAccelerator.GenerateSampleData
 
         }
 
+        public void CreateProducts(OrganizationServiceProxy _service, List<Medication> products)
+        {
+            try
+            {
+                // we need the Uomid/groupid first
+                MedicineUoM Uom = new MedicineUoM();
+
+                Uom.WriteToCDS(_service);
+
+                // create the products
+                foreach (Medication product in products)
+                {
+                    product.UomId = Uom.UomId;
+                    product.UnitGroupId = Uom.GroupId;
+                    product.WriteToCDS(_service);
+                }
+
+                // create the pricelist and associate products
+                MedicationPriceList PriceList = new MedicationPriceList();
+                PriceList.Products = products;
+                PriceList.GroupId = Uom.GroupId;
+                PriceList.UomId = Uom.UomId;
+
+                PriceList.WriteToCDS(_service);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
         #region Queueing Help
 
         private static object addlock = new object();
@@ -271,13 +318,13 @@ namespace CDM.HealthAccelerator.GenerateSampleData
         /// <param name="contact"></param>
 
         private static object getObject = new object();
-        private Profile GetContact()
+        private Profile GetProfile()
         {
             lock (getObject)
             {
-                if (IncomingContacts.Count > 0)
+                if (IncomingProfiles.Count > 0)
                 {
-                    return IncomingContacts.Dequeue();
+                    return IncomingProfiles.Dequeue();
                 }
                 else
                 {
@@ -299,13 +346,6 @@ namespace CDM.HealthAccelerator.GenerateSampleData
         }
 
         #endregion
-
-        /// <summary>
-        /// These are to make it easier to log into CRM
-        /// whether on premise or online
-        /// supports 3 instances (Online, OnPremise, Dev)
-        /// </summary>
-        /// <returns></returns>
 
     }
 }

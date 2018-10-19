@@ -142,7 +142,7 @@ namespace CDM.HealthAccelerator.DataModel
             {
                 //SampleDataCache.RandomDateTime birthDayrdt = new SampleDataCache.RandomDateTime(1955, 1, 1, new DateTime(2000, 1, 1));
 
-                SampleDataCache.InitializeFakeDataHelpers();
+                SampleDataCache.InitializeDataCache();
 
                 List<Profile> listContacts = new List<Profile>();
                 int roles = ((PractitionerConfiguration)(configuration)).Roles;
@@ -155,14 +155,16 @@ namespace CDM.HealthAccelerator.DataModel
 
                     a.PractitionerConfiguration = ((PractitionerConfiguration)(configuration));
 
-                    int maleorfemale = SampleDataCache.RandomContactGenerator.Next(1, 100);
+                    int maleorfemale = SampleDataCache.SelectRandomItem.Next(1, 100);
 
-                    a.FirstName = maleorfemale < 50 ? SampleDataCache.Malenames[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.Malenames.Count - 1)] : SampleDataCache.Femalenames[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.Femalenames.Count - 1)];
-                    a.LastName = SampleDataCache.Lastnames[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.Lastnames.Count - 1)];
+                    a.FirstName = maleorfemale < 50 ? SampleDataCache.Malenames[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.Malenames.Count - 1)] : SampleDataCache.Femalenames[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.Femalenames.Count - 1)];
+                    a.LastName = SampleDataCache.Lastnames[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.Lastnames.Count - 1)];
 
-                    SampleDataCache.AddressInfo addressInfo = SampleDataCache.AddressInfos[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.AddressInfos.Count - 1)];
+                    SampleDataCache.AddressInfo addressInfo = SampleDataCache.AddressInfos[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.AddressInfos.Count - 1)];
 
-                    a.PrimaryLanguageCode = SampleDataCache.Languages[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.Languages.Count - 1)];
+                    a.PrimaryLanguageCode = SampleDataCache.CodeableConcepts[HealthCDMEnums.CodeableConcept_Type.Language.ToString()]
+                        .Values.ElementAt(SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.CodeableConcepts[HealthCDMEnums.CodeableConcept_Type.Language.ToString()]
+                        .Values.Count - 1)).Key;
 
                     a.Address1City = addressInfo.City;
                     a.Address1Country = addressInfo.Country;
@@ -172,12 +174,12 @@ namespace CDM.HealthAccelerator.DataModel
                     a.Telephone2 = addressInfo.Areacode + "-" + addressInfo.Telephone; //(home)
                     a.Address1PostalCode = addressInfo.Zipcode;
                     a.Address1StateOrProvince = addressInfo.State;
-                    a.Age = SampleDataCache.RandomContactGenerator.Next(18, 100);
+                    a.Age = SampleDataCache.SelectRandomItem.Next(18, 100);
                     a.EmailAddress1 = a.FirstName + "_" + a.LastName + "@testlive.com";
                     a.FullName = a.FirstName + " " + a.LastName;
                     a.GenderCode = maleorfemale < 50 ? (int)ContactGenderCode.Male : (int)ContactGenderCode.Female;
-                    a.Salutation = SampleDataCache.PractitionerSalutations[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.PractitionerSalutations.Count - 1)];
-                    a.CDMContactType = ContactType.Practitioner;
+                    a.Salutation = SampleDataCache.PractitionerSalutations[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.PractitionerSalutations.Count - 1)];
+                    a.CDMContactType = ProfileType.Practitioner;
                     a.BirthDate = birthDayRandomGenerator.Next();
 
                     if (roles >= 1)
@@ -251,78 +253,7 @@ namespace CDM.HealthAccelerator.DataModel
                     //enable using proxy types
                     _serviceProxy.EnableProxyTypes();
 
-                    HealthCDM.Contact addContact = new HealthCDM.Contact();
-
-                    //Set standard atttributes (this could be done via reflection)
-                    // but for now this is all we are setting
-                    addContact.GenderCode = new OptionSetValue(GenderCode);
-                    addContact.FirstName = FirstName;
-                    addContact.LastName = LastName;
-                    addContact.Address1_Line1 = Address1Line1;
-                    addContact.Address1_City = Address1City;
-                    addContact.Address1_StateOrProvince = Address1StateOrProvince;
-                    addContact.Address1_PostalCode = Address1PostalCode;
-                    addContact.Telephone1 = Telephone1;
-                    addContact.MobilePhone = MobilePhone;
-                    addContact.Telephone2 = Telephone2;
-                    addContact.Address1_Country = Address1Country;
-                    addContact.EMailAddress1 = FirstName + "." + LastName + "@" + EmailAddressDomain;
-                    addContact.Address1_Country = Address1Country;
-                    addContact.Salutation = Salutation;
-                    addContact.BirthDate = BirthDate;
-                    // set the primary language
-                    addContact.msemr_Communication1Language = new EntityReference(HealthCDM.msemr_codeableconcept.EntityLogicalName, GetCodeableConceptId(_serviceProxy, PrimaryLanguageCode, (int)HealthCDMEnums.CodeableConcept_Type.Language));
-
-                    addContact.msemr_ContactType = new OptionSetValue((int)HealthCDMEnums.Contact_Contacttype.Practitioner);
-
-                    try
-                    {
-                        profileId = _serviceProxy.Create(addContact);
-
-                        if (profileId != Guid.Empty)
-                        {
-                            ContactId = profileId.ToString();
-
-                            // now that we have the ContactId for this Practitioner we need
-                            // to create the roles we have and the qualifications
-
-                            foreach (PractitionerRole role in Roles)
-                            {
-                                role.PractitionerId = ContactId;
-
-                                try
-                                {
-                                    role.WriteToCDS(_serviceProxy);
-                                }
-                                catch(Exception rex)
-                                {
-                                    Console.WriteLine(rex.ToString());
-                                }
-                            }
-
-                            foreach (PractitionerQualification qualification in Qualifications)
-                            {
-                                qualification.PractitionerId = ContactId;
-
-                                try
-                                {
-                                    qualification.WriteToCDS(_serviceProxy);
-                                }
-                                catch (Exception qex)
-                                {
-                                    Console.WriteLine(qex.ToString());
-                                }
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("Contact Id == null");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.ToString());
-                    }
+                    profileId = WriteToCDS(_serviceProxy);
                 }
             }
             catch (Exception ex)

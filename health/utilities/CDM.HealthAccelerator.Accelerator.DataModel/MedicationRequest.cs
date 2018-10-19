@@ -27,6 +27,8 @@ namespace CDM.HealthAccelerator.DataModel
     [Serializable]
     public class MedicationRequest : BaseFunctions
     {
+        #region Attributes
+
         private string patientId;
         private string practitionerId;
         private string name;
@@ -36,6 +38,16 @@ namespace CDM.HealthAccelerator.DataModel
         private int subjectType;
         private string medicationId;
         private int medicationType;
+        private int requestorAgentType;
+        private int intent;
+        private int dispenseCount;
+        private int refills;
+        private string encounterId;
+        private string medicationTypePreference;
+
+        private DateTime periodEndDate;
+
+        private DateTime periodStartDate;
 
         public string PatientId
         {
@@ -154,29 +166,148 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
+        public int RequestorAgentType
+        {
+            get
+            {
+                return requestorAgentType;
+            }
+
+            set
+            {
+                requestorAgentType = value;
+            }
+        }
+
+        public int Intent
+        {
+            get
+            {
+                return intent;
+            }
+
+            set
+            {
+                intent = value;
+            }
+        }
+
+        public DateTime PeriodEndDate
+        {
+            get
+            {
+                return periodEndDate;
+            }
+
+            set
+            {
+                periodEndDate = value;
+            }
+        }
+
+        public DateTime PeriodStartDate
+        {
+            get
+            {
+                return periodStartDate;
+            }
+
+            set
+            {
+                periodStartDate = value;
+            }
+        }
+
+        public int DispenseCount
+        {
+            get
+            {
+                return dispenseCount;
+            }
+
+            set
+            {
+                dispenseCount = value;
+            }
+        }
+
+        public int Refills
+        {
+            get
+            {
+                return refills;
+            }
+
+            set
+            {
+                refills = value;
+            }
+        }
+
+        public string EncounterId
+        {
+            get
+            {
+                return encounterId;
+            }
+
+            set
+            {
+                encounterId = value;
+            }
+        }
+
+        public string MedicationTypePreference
+        {
+            get
+            {
+                return medicationTypePreference;
+            }
+
+            set
+            {
+                medicationTypePreference = value;
+            }
+        }
+
+        #endregion
+
         public MedicationRequest()
         {
             InitializeEntity();
         }
         
-        public MedicationRequest(string patientid, string practitionerid)
+        public MedicationRequest(string patientid, string practitionerid, string encounterid, string productId)
         {
             PatientId = patientId;
             PractitionerId = practitionerid;
+            EncounterId = encounterid;
+            MedicationTypePreference = productId;
             InitializeEntity();
         }
 
         public override void InitializeEntity()
         {
-            Name = SampleDataCache.Medications[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.Medications.Count - 1)];
+            Name = SampleDataCache.Medications[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.Medications.Count - 1)];
             Status = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.MedicationRequest_Status>();
             Priority = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.MedicationRequest_Priority>();
             MedicationType = (int)HealthCDMEnums.MedicationRequest_Medicationtype.MedicationReference;
 
-            SampleDataCache.RandomDateTime rdt = new SampleDataCache.RandomDateTime(2017, 1, 1, DateTime.Today);
+            SampleDataCache.GenerateRandomDateTime rdt = new SampleDataCache.GenerateRandomDateTime(2017, 1, 1, DateTime.Today);
             authoredOn = rdt.Next();
 
             SubjectType = (int)HealthCDMEnums.MedicationRequest_Subjecttype.Patient;
+            RequestorAgentType = (int)HealthCDMEnums.MedicationRequest_Requesteragenttype.Practitioner;
+            intent = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.MedicationRequest_Intent>();
+
+            DateTime startDate = rdt.Next();
+            DateTime endDate = rdt.AddYears(startDate, 1, 2);
+
+            PeriodStartDate = startDate;
+            PeriodEndDate = endDate;
+            
+            Refills = SampleDataCache.SelectRandomItem.Next(1, 3);
+            DispenseCount = SampleDataCache.SelectRandomItem.Next(1, 2);
         }
 
         public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
@@ -221,36 +352,7 @@ namespace CDM.HealthAccelerator.DataModel
                     //enable using proxy types
                     _serviceProxy.EnableProxyTypes();
 
-                    HealthCDM.msemr_medicationrequest addMedicationRequest = new HealthCDM.msemr_medicationrequest();
-
-                    addMedicationRequest.msemr_SubjectTypePatient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PatientId)));
-                    addMedicationRequest.msemr_RequesterAgentTypePractitioner = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PractitionerId)));
-                    addMedicationRequest.msemr_Status = new OptionSetValue(Status);
-                    addMedicationRequest.msemr_AuthoredOn = AuthoredOn;
-                    addMedicationRequest.msemr_name = Name;
-                    addMedicationRequest.msemr_Priority = new OptionSetValue(Priority);
-                    addMedicationRequest.msemr_SubjectType = new OptionSetValue(SubjectType);
-                    addMedicationRequest.msemr_MedicationType = new OptionSetValue(MedicationType);
-                    // NEED TO add products for this part to work addMedicationRequest.msemr_medicationtypereference = new EntityReference
-
-                    try
-                    {
-                        medicationrequestId = _serviceProxy.Create(addMedicationRequest);
-
-                        if (medicationrequestId != Guid.Empty)
-                        {
-                            MedicationId = medicationrequestId.ToString();
-                            Console.WriteLine("Created Patient Medication Request [" + MedicationId + "] for Patient [" + PatientId + "]");
-                        }
-                        else
-                        {
-                            throw new Exception("Medication Request Id == null");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.ToString());
-                    }
+                    medicationrequestId = WriteToCDS(_serviceProxy);
                 }
             }
             catch (Exception ex)
@@ -269,12 +371,28 @@ namespace CDM.HealthAccelerator.DataModel
 
             addMedicationRequest.msemr_SubjectTypePatient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PatientId)));
             addMedicationRequest.msemr_RequesterAgentTypePractitioner = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PractitionerId)));
+            addMedicationRequest.msemr_medicationtypereference = new EntityReference(HealthCDM.Product.EntityLogicalName, Guid.Parse((MedicationTypePreference)));
             addMedicationRequest.msemr_Status = new OptionSetValue(Status);
             addMedicationRequest.msemr_AuthoredOn = AuthoredOn;
             addMedicationRequest.msemr_name = Name;
             addMedicationRequest.msemr_Priority = new OptionSetValue(Priority);
             addMedicationRequest.msemr_SubjectType = new OptionSetValue(SubjectType);
             addMedicationRequest.msemr_MedicationType = new OptionSetValue(MedicationType);
+            addMedicationRequest.msemr_RequesterAgentType = new OptionSetValue(RequestorAgentType);
+            addMedicationRequest.msemr_Intent = new OptionSetValue(Intent);
+            addMedicationRequest.msemr_DispenseRequestNumberofRepeatsAllowed = refills;
+            addMedicationRequest.msemr_DispenseRequestQuantity = DispenseCount;
+
+            if (!string.IsNullOrEmpty(EncounterId))
+            {
+                addMedicationRequest.msemr_ContextTypeEncounter = new EntityReference(HealthCDM.msemr_encounter.EntityLogicalName, Guid.Parse((EncounterId)));
+            }
+
+            if (!string.IsNullOrEmpty(MedicationTypePreference))
+            {
+                addMedicationRequest.msemr_medicationtypereference = new EntityReference(HealthCDM.Product.EntityLogicalName, Guid.Parse((MedicationTypePreference)));
+            }
+
 
             try
             {

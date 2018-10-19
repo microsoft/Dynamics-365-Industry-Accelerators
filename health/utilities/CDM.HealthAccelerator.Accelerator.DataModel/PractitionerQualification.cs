@@ -27,17 +27,7 @@ namespace CDM.HealthAccelerator.DataModel
     [Serializable]
     public class PractitionerQualification : BaseFunctions
     {
-        public PractitionerQualification()
-        {
-            InitializeEntity();
-        }
-
-        public PractitionerQualification(string practitionerId)
-        {
-            PractitionerId = practitionerId;
-            InitializeEntity();
-        }
-
+        #region Attributes
 
         private string qualificationId;
 
@@ -114,11 +104,25 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
+
+        #endregion
+
+        public PractitionerQualification()
+        {
+            InitializeEntity();
+        }
+
+        public PractitionerQualification(string practitionerId)
+        {
+            PractitionerId = practitionerId;
+            InitializeEntity();
+        }
+
         public override void InitializeEntity()
         {
-            Display = SampleDataCache.PractitionerQualifications[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.PractitionerQualifications.Count - 1)];
+            Display = SampleDataCache.PractitionerQualifications[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.PractitionerQualifications.Count - 1)];
 
-            SampleDataCache.RandomDateTime rdt = new SampleDataCache.RandomDateTime(2010, 1, 1, DateTime.Today);
+            SampleDataCache.GenerateRandomDateTime rdt = new SampleDataCache.GenerateRandomDateTime(2010, 1, 1, DateTime.Today);
 
             DateTime startDate = rdt.Next();
             DateTime endDate = rdt.AddYears(startDate, 5, 10);
@@ -169,31 +173,7 @@ namespace CDM.HealthAccelerator.DataModel
                     //enable using proxy types
                     _serviceProxy.EnableProxyTypes();
 
-                    HealthCDM.msemr_practitionerqualification addPractitionerQualification = new HealthCDM.msemr_practitionerqualification();
-
-                    addPractitionerQualification.msemr_Practitioner = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse(PractitionerId));
-                    addPractitionerQualification.msemr_PeriodEnd = PeriodEndDate;
-                    addPractitionerQualification.msemr_PeriodStart = PeriodStartDate;
-                    addPractitionerQualification.msemr_display = Display;
-
-                    try
-                    {
-                        practitionerQualificationId = _serviceProxy.Create(addPractitionerQualification);
-
-                        if (practitionerQualificationId != Guid.Empty)
-                        {
-                            QualificationId = practitionerQualificationId.ToString();
-                            Console.WriteLine("Created Practitioner Qualification [" + QualificationId + "] for Practitioner [" + PractitionerId + "]");
-                        }
-                        else
-                        {
-                            throw new Exception("QualificationId == null");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.ToString());
-                    }
+                    practitionerQualificationId = WriteToCDS(_serviceProxy);
                 }
             }
             catch (Exception ex)

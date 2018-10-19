@@ -130,7 +130,7 @@ namespace CDM.HealthAccelerator.DataModel
 
         public override void InitializeEntity()
         {
-            Item = SampleDataCache.AllergyItems[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.AllergyItems.Count - 1)];
+            Item = SampleDataCache.AllergyItems[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.AllergyItems.Count - 1)];
 
             VertificationStatus = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.AllergyIntolerance_Verificationstatus>();
             Severity = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.AllergyIntolerance_Criticality>();
@@ -179,33 +179,7 @@ namespace CDM.HealthAccelerator.DataModel
                     //enable using proxy types
                     _serviceProxy.EnableProxyTypes();
 
-                    HealthCDM.msemr_allergyintolerance addAllergyIntolerance = new HealthCDM.msemr_allergyintolerance();
-
-                    addAllergyIntolerance.msemr_Patient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PatientId)));
-                    addAllergyIntolerance.msemr_name = Item;
-                    addAllergyIntolerance.msemr_Code = Item;
-                    addAllergyIntolerance.msemr_Criticality = new OptionSetValue(Severity);
-                    addAllergyIntolerance.msemr_VerificationStatus = new OptionSetValue(VertificationStatus);
-                    addAllergyIntolerance.msemr_Type = new OptionSetValue(Type);
-
-                    try
-                    {
-                        allergyIntolernaceId = _serviceProxy.Create(addAllergyIntolerance);
-
-                        if (allergyIntolernaceId != Guid.Empty)
-                        {
-                            AllergyIntoleranceId = allergyIntolernaceId.ToString();
-                            Console.WriteLine("Created Allergy Intolerance [" + AllergyIntoleranceId + "] for Patient [" + PatientId + "]");
-                        }
-                        else
-                        {
-                            throw new Exception("AllergyIntoleranceId == null");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.ToString());
-                    }
+                    allergyIntolernaceId = WriteToCDS(_serviceProxy);
                 }
             }
             catch (Exception ex)

@@ -34,29 +34,49 @@ namespace CDM.HealthAccelerator.DataModel
             ReferralCount = 1;
         }
 
-        private int referralCount;
+        private int productCount = 5;
 
-        private int procedureCount;
+        private int taskCount = 1;
 
-        private int deviceCount;
+        private int specimenCount = 1;
 
-        private int conditionCount;
+        private int riskAssessmentCount = 1;
 
-        private int nutritionOrderCount;
+        private int referralCount = 1;
+
+        private int careTeamCount = 1;
+
+        private int procedureCount = 1;
+
+        private int deviceCount = 1;
+
+        private int conditionCount = 1;
+
+        private int nutritionOrderCount = 1;
 
         private string practionerFileName;
 
         private string relatedPersonsFileName;
 
+        private string locationsFileName;
+
+        private string accountsFileName;
+
         private string medicationsFileName;
 
         private string encountersFileName;
 
-        private int medicationCount;
+        private int medicationCount = 1;
 
-        private int encountersCount;
+        private int encountersCount = 1;
 
-        private int allergyIntoleranceCount;
+        private int allergyIntoleranceCount = 1;
+
+        private int episodesOfCareCount = 1;
+
+        private int appointmentCount = 1;
+
+        private int carePlanCount = 1;
 
         public string PractionerFileName
         {
@@ -211,6 +231,136 @@ namespace CDM.HealthAccelerator.DataModel
             set
             {
                 referralCount = value;
+            }
+        }
+
+        public string LocationsFileName
+        {
+            get
+            {
+                return locationsFileName;
+            }
+
+            set
+            {
+                locationsFileName = value;
+            }
+        }
+
+        public string AccountsFileName
+        {
+            get
+            {
+                return accountsFileName;
+            }
+
+            set
+            {
+                accountsFileName = value;
+            }
+        }
+
+        public int EpisodesOfCareCount
+        {
+            get
+            {
+                return episodesOfCareCount;
+            }
+
+            set
+            {
+                episodesOfCareCount = value;
+            }
+        }
+
+        public int AppointmentCount
+        {
+            get
+            {
+                return appointmentCount;
+            }
+
+            set
+            {
+                appointmentCount = value;
+            }
+        }
+
+        public int CarePlanCount
+        {
+            get
+            {
+                return carePlanCount;
+            }
+
+            set
+            {
+                carePlanCount = value;
+            }
+        }
+
+        public int CareTeamCount
+        {
+            get
+            {
+                return careTeamCount;
+            }
+
+            set
+            {
+                careTeamCount = value;
+            }
+        }
+
+        public int RiskAssessmentCount
+        {
+            get
+            {
+                return riskAssessmentCount;
+            }
+
+            set
+            {
+                riskAssessmentCount = value;
+            }
+        }
+
+        public int SpecimenCount
+        {
+            get
+            {
+                return specimenCount;
+            }
+
+            set
+            {
+                specimenCount = value;
+            }
+        }
+
+        public int TaskCount
+        {
+            get
+            {
+                return taskCount;
+            }
+
+            set
+            {
+                taskCount = value;
+            }
+        }
+
+        public int ProductCount
+        {
+            get
+            {
+                return productCount;
+            }
+
+            set
+            {
+                productCount = value;
             }
         }
     }

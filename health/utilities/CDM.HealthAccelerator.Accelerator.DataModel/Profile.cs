@@ -37,12 +37,15 @@ namespace CDM.HealthAccelerator.DataModel
         #region Large Profile Definition
 
 
-        public enum ContactType
+        public enum ProfileType
         {
             Standard = 1,
             Patient = 2,
             Practitioner = 3,
-            RelatedPerson = 4
+            RelatedPerson = 4,
+            Organization,
+            Location,
+            Medication
         }
 
         public enum ContactGenderCode
@@ -66,9 +69,9 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
-        private ContactType contactType;
+        private ProfileType contactType;
 
-        public ContactType CDMContactType
+        public ProfileType CDMContactType
         {
             get
             {
@@ -2042,53 +2045,53 @@ namespace CDM.HealthAccelerator.DataModel
         /// </summary>
         public override sealed void InitializeEntity()
         {
-            SampleDataCache.InitializeFakeDataHelpers();
+            SampleDataCache.InitializeDataCache();
 
-            this.AccountRoleCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
-            this.Address1AddressTypeCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.AccountRoleCode = SampleDataCache.SelectRandomItem.Next(1, 100);
+            this.Address1AddressTypeCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Address1City = string.Empty; //"Address1City-" + suffix;
             this.Address1Country = string.Empty; //"Address1Country-" + suffix;
             this.Address1County = string.Empty; //"Address1County-" + suffix;
             this.Address1Fax = string.Empty; //"Address1Fax-" + suffix;
-            this.Address1FreightTermsCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
-            this.Address1Latitude = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.Address1FreightTermsCode = SampleDataCache.SelectRandomItem.Next(1, 100);
+            this.Address1Latitude = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Address1Line1 = string.Empty; //"Address1Line1-" + suffix;
             this.Address1Line2 = string.Empty; // "Address1Line2-" + suffix;
             this.Address1Line3 = string.Empty; //"Address1Line3-" + suffix;
-            this.Address1Longitude = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.Address1Longitude = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Address1Name = string.Empty; //"Address1Name-" + suffix;
             this.Address1PostalCode = string.Empty; //"Address1PostalCode-" + suffix;
             this.Address1PostOfficeBox = string.Empty; // "Address1PostOfficeBox-" + suffix;
             this.Address1PrimaryContactName = string.Empty; //"Address1PrimaryContactName-" + suffix;
-            this.Address1ShippingMethodCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.Address1ShippingMethodCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Address1StateOrProvince = string.Empty; //"Address1StateOrProvince-" + suffix;
             this.Address1Telephone1 = string.Empty; //"Address1Telephone1-" + suffix;
             this.Address1Telephone2 = string.Empty; //"Address1Telephone2-" + suffix;
             this.Address1Telephone3 = string.Empty; // "Address1Telephone3-" + suffix;
             this.Address1UpsZone = string.Empty; //"UPSZ";
-            this.Address1UtcOffset = SampleDataCache.RandomContactGenerator.Next(1, 100);
-            this.Address2AddressTypeCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.Address1UtcOffset = SampleDataCache.SelectRandomItem.Next(1, 100);
+            this.Address2AddressTypeCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Address2City = string.Empty; //"Address2City-" + suffix;
             this.Address2Country = string.Empty; // "Address2Country-" + suffix;
             this.Address2County = string.Empty; // "Address2County-" + suffix;
             this.Address2Fax = string.Empty; //"Address2Fax-" + suffix;
-            this.Address2FreightTermsCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
-            this.Address2Latitude = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.Address2FreightTermsCode = SampleDataCache.SelectRandomItem.Next(1, 100);
+            this.Address2Latitude = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Address2Line1 = string.Empty; //"Address2Line1-" + suffix;
             this.Address2Line2 = string.Empty; //"Address2Line2-" + suffix;
             this.Address2Line3 = string.Empty; //"Address2Line3-" + suffix;
-            this.Address2Longitude = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.Address2Longitude = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Address2Name = string.Empty; // "Address2Name-" + suffix;
             this.Address2PostalCode = string.Empty; //"Address2PostalCode-" + suffix;
             this.Address2PostOfficeBox = string.Empty; //"Address2PostOfficeBox-" + suffix;
             this.Address2PrimaryContactName = string.Empty; //"Address2PrimaryContactName-" + suffix;
-            this.Address2ShippingMethodCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.Address2ShippingMethodCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Address2StateOrProvince = string.Empty; //"Address2StateOrProvince-" + suffix;
             this.Address2Telephone1 = string.Empty; // "Address2Telephone1-" + suffix;
             this.Address2Telephone2 = string.Empty; //"Address2Telephone2-" + suffix;
             this.Address2Telephone3 = string.Empty; //"Address2Telephone3-" + suffix;
             this.Address2UpsZone = string.Empty; //"Address2UPSZone-" + suffix;
-            this.Address2UtcOffset = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.Address2UtcOffset = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Aging30 = 1.00M;
             this.Aging30Base = 2.00M;
             this.Aging60 = 3.00M;
@@ -2107,8 +2110,8 @@ namespace CDM.HealthAccelerator.DataModel
             this.CreditLimit = 9.50M;
             this.CreditLimitBase = 10.50M;
             this.CreditOnHold = false;
-            this.CustomerSizeCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
-            this.CustomerTypeCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.CustomerSizeCode = SampleDataCache.SelectRandomItem.Next(1, 100);
+            this.CustomerTypeCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Department = string.Empty; //"Department-" + suffix;
             this.DonotBulkEMail = false;
             this.DonotBulkPostalMail = false;
@@ -2117,48 +2120,48 @@ namespace CDM.HealthAccelerator.DataModel
             this.DonotPhone = false;
             this.DonotPostalMail = false;
             this.DonotSendMm = false;
-            this.EducationCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.EducationCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.EmailAddress1 = string.Empty; // "emailAddress1-" + suffix;
             this.EmailAddress2 = string.Empty; //"emailAddress2-" + suffix;
             this.EmailAddress3 = string.Empty; // "emailAddress3-" + suffix;
             this.EmployeeId = string.Empty; // "EmployeeId-" + suffix;
             this.ExchangeRate = 23.5M;
-            this.FamilyStatusCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.FamilyStatusCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Fax = string.Empty; // "Fax-" + suffix;
             this.FirstName = string.Empty; //"FirstName-" + suffix;
             this.FullName = string.Empty; // "FullName-" + suffix;
-            this.GenderCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.GenderCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.GovernmentId = string.Empty; //"GovernmentId-" + suffix;
-            this.HasChildrenCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
-            this.ImportSequenceNumber = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.HasChildrenCode = SampleDataCache.SelectRandomItem.Next(1, 100);
+            this.ImportSequenceNumber = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.IsBackofficeCustomer = false;
             this.JobTitle = string.Empty; //"JobTitle-" + suffix;
             this.LastName = string.Empty; //"LastName-" + suffix;
             this.LastUsedInCampaign = DateTime.UtcNow;
-            this.LeadSourceCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.LeadSourceCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.ManagerName = string.Empty; //"ManagerName-" + suffix;
             this.ManagerPhone = string.Empty; //"ManagerPhone-" + suffix;
             this.Merged = true;
             this.MiddleName = string.Empty; //"MiddleName-" + suffix;
             this.MobilePhone = string.Empty; //"MobilePhone-" + suffix;
             this.NickName = string.Empty; //"NickName-" + suffix;
-            this.NumberOfChildren = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.NumberOfChildren = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Pager = string.Empty; //"Pager-" + suffix;
-            this.PaymentTermsCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
-            this.PreferredAppointmentDayCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
-            this.PreferredAppointmentTimeCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
-            this.PreferredContactMethodCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.PaymentTermsCode = SampleDataCache.SelectRandomItem.Next(1, 100);
+            this.PreferredAppointmentDayCode = SampleDataCache.SelectRandomItem.Next(1, 100);
+            this.PreferredAppointmentTimeCode = SampleDataCache.SelectRandomItem.Next(1, 100);
+            this.PreferredContactMethodCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Salutation = string.Empty; //"Salutation-" + suffix;
-            this.ShippingMethodCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.ShippingMethodCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.SpousesName = string.Empty; // "SpousesName-" + suffix;
-            this.StateCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
-            this.StatusCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.StateCode = SampleDataCache.SelectRandomItem.Next(1, 100);
+            this.StatusCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.Telephone1 = string.Empty; //"Telephone1-" + suffix;
             this.Telephone2 = string.Empty; // "Telephone2-" + suffix;
             this.Telephone3 = string.Empty; //"Telephone3-" + suffix;
-            this.TerritoryCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
-            this.TimeZoneRuleVersionNumber = SampleDataCache.RandomContactGenerator.Next(1, 100);
-            this.UtcConversionTimeZoneCode = SampleDataCache.RandomContactGenerator.Next(1, 100);
+            this.TerritoryCode = SampleDataCache.SelectRandomItem.Next(1, 100);
+            this.TimeZoneRuleVersionNumber = SampleDataCache.SelectRandomItem.Next(1, 100);
+            this.UtcConversionTimeZoneCode = SampleDataCache.SelectRandomItem.Next(1, 100);
             this.WebSiteUrl = string.Empty; //"WebSiteUrl-" + suffix;
             this.YomiFirstName = string.Empty; //"YomiFirstName-" + suffix;
             this.YomiFullName = string.Empty; // "YomiFullName-" + suffix;
