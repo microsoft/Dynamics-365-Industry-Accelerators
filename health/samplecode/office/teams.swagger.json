@@ -1,0 +1,298 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Create Microsoft Team Connector",
+      "description": "Things that Microsoft has forgotten - Create a Microsoft Team",
+      "version": "1.0"
+    },
+    "host": "graph.microsoft.com",
+    "basePath": "/",
+    "schemes": [
+      "https"
+    ],
+    "consumes": [],
+    "produces": [],
+    "paths": {
+      "/beta/groups/{id}/team": {
+        "put": {
+          "responses": {
+            "default": {
+              "description": "default",
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "summary": "Create a Microsoft Team",
+          "description": "Create a Microsoft Team for an existing Office 365 Group",
+          "operationId": "CreateTeam",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string",
+              "description": "ID of the Office 365 Group",
+              "x-ms-summary": "Group Id",
+              "x-ms-visibility": "important"
+            },
+            {
+              "name": "Content-Type",
+              "in": "header",
+              "required": false,
+              "type": "string",
+              "default": "application/json",
+              "x-ms-visibility": "internal"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "guestSettings": {
+                    "type": "object",
+                    "properties": {
+                      "allowCreateUpdateChannels": {
+                        "type": "boolean",
+                        "description": "Allow create and update channels",
+                        "x-ms-summary": "allowCreateUpdateChannels",
+                        "title": "Allow create and update channels",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      },
+                      "allowDeleteChannels": {
+                        "type": "boolean",
+                        "description": "Allow delete channels",
+                        "x-ms-summary": "allowDeleteChannels",
+                        "title": "Allow delete channels",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      }
+                    },
+                    "description": "Guests",
+                    "x-ms-summary": "Guests:"
+                  },
+                  "memberSettings": {
+                    "type": "object",
+                    "properties": {
+                      "allowCreateUpdateChannels": {
+                        "type": "boolean",
+                        "description": "Allow create and update channels",
+                        "x-ms-summary": "allowCreateUpdateChannels",
+                        "title": "Allow create update channels",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      },
+                      "allowDeleteChannels": {
+                        "type": "boolean",
+                        "description": "Allow delete channels",
+                        "x-ms-summary": "allowDeleteChannels",
+                        "title": "Allow delete channels",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      },
+                      "allowAddRemoveApps": {
+                        "type": "boolean",
+                        "description": "Allow add and remove apps",
+                        "x-ms-summary": "allowAddRemoveApps",
+                        "title": "Allow add and remove apps",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      },
+                      "allowCreateUpdateRemoveTabs": {
+                        "type": "boolean",
+                        "description": "Allow create, add and remove apps",
+                        "x-ms-summary": "allowCreateUpdateRemoveTabs",
+                        "title": "Allow create, add and remove apps",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      },
+                      "allowCreateUpdateRemoveConnectors": {
+                        "type": "boolean",
+                        "description": "Allow create, add and update connectors",
+                        "x-ms-summary": "allowCreateUpdateRemoveConnectors",
+                        "title": "Allow create, add and update connectors",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      }
+                    },
+                    "description": "Members",
+                    "x-ms-summary": "Members:"
+                  },
+                  "messagingSettings": {
+                    "type": "object",
+                    "properties": {
+                      "allowUserEditMessages": {
+                        "type": "boolean",
+                        "description": "Allow users to edit messages",
+                        "x-ms-summary": "allowUserEditMessages",
+                        "title": "Allow users to edit messages",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      },
+                      "allowUserDeleteMessages": {
+                        "type": "boolean",
+                        "description": "Allow users to delete messages",
+                        "x-ms-summary": "allowUserDeleteMessages",
+                        "title": "Allow users to delete messages",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      },
+                      "allowOwnerDeleteMessages": {
+                        "type": "boolean",
+                        "description": "Allow owners to delete messages",
+                        "x-ms-summary": "allowOwnerDeleteMessages",
+                        "title": "Allow owners to delete messages",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      },
+                      "allowTeamMentions": {
+                        "type": "boolean",
+                        "description": "Allow team mentions",
+                        "x-ms-summary": "allowTeamMentions",
+                        "title": "Allow team mentions",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      },
+                      "allowChannelMentions": {
+                        "type": "boolean",
+                        "description": "Allow channel mentions",
+                        "x-ms-summary": "allowChannelMentions",
+                        "title": "Allow channel mentions",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      }
+                    },
+                    "description": "Settings",
+                    "x-ms-summary": "Settings:"
+                  },
+                  "funSettings": {
+                    "type": "object",
+                    "properties": {
+                      "allowGiphy": {
+                        "type": "boolean",
+                        "description": "Allow Giphy",
+                        "x-ms-summary": "allowGiphy",
+                        "title": "Allow Giphy",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      },
+                      "giphyContentRating": {
+                        "type": "string",
+                        "description": "Giphy Content Rating",
+                        "x-ms-summary": "giphyContentRating",
+                        "title": "Giphy Content Rating",
+                        "x-ms-visibility": "advanced",
+                        "default": "strict"
+                      },
+                      "allowStickersAndMemes": {
+                        "type": "boolean",
+                        "description": "Allow stickers and memes",
+                        "x-ms-summary": "allowStickersAndMemes",
+                        "title": "Allow stickers and memes",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      },
+                      "allowCustomMemes": {
+                        "type": "boolean",
+                        "description": "Allow custom memes",
+                        "x-ms-summary": "allowCustomMemes",
+                        "title": "Allow custom memes",
+                        "x-ms-visibility": "advanced",
+                        "enum": [
+                          "true",
+                          "false"
+                        ],
+                        "default": "true"
+                      }
+                    },
+                    "description": "Fun",
+                    "x-ms-summary": "Fun:"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "definitions": {},
+    "parameters": {},
+    "responses": {},
+    "securityDefinitions": {
+      "oauth2_auth": {
+        "type": "oauth2",
+        "flow": "accessCode",
+        "authorizationUrl": "https://login.microsoftonline.com/yourtenant.onmicrosoft.com/oauth2/v2.0/authorize",
+        "tokenUrl": "https://login.microsoftonline.com/yourtenant.onmicrosoft.com/oauth2/v2.0/token",
+        "scopes": {
+          "Group.ReadWrite.All": "Group.ReadWrite.All"
+        }
+      }
+    },
+    "security": [
+      {
+        "oauth2_auth": [
+          "Group.ReadWrite.All"
+        ]
+      }
+    ],
+    "tags": []
+  }
