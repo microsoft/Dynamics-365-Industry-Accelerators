@@ -7,6 +7,11 @@ This repository represents the artifacts related to the Health Accelerator. The 
 
 The documentation covers user guides, how to's, sample data descriptions, entity mapping data, attribute descriptions etc.
 
+# FHIR / HL7
+
+To review the FHIR / HL7 V3.01 spec we are utilizing look here https://www.hl7.org/fhir/
+Please see the resource list here https://www.hl7.org/fhir/resourcelist.html
+
 # Samplecode
 
 The sample code represents SDK style examples on how to insert data into the Health Accelerator model for CDS.

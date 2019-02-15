@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDM.HealthAccelerator.DataModel", "CDM.HealthAccelerator.Accelerator.DataModel\CDM.HealthAccelerator.DataModel.csproj", "{9C5E0A77-0D55-47D3-ACF1-5D1720E16724}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDM.HealthAccelerator.ExportCodeableConcepts", "CDM.HealthAccelerator.CreateCodeableConceptMappingFile\CDM.HealthAccelerator.ExportCodeableConcepts.csproj", "{40B71789-6814-4EE9-8C8B-C06D8B97A5B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDM.HealthAccelerator.GenerateEnums", "CDM.HealthAccelerator.ExportOptionSetValues\CDM.HealthAccelerator.GenerateEnums.csproj", "{B3CB90C5-DCC2-4585-BB62-511B19EF8CE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDM.HealthAccelerator.ImportCodeableConcepts", "CDM.HealthAccelerator.ImportCodeableConcepts\CDM.HealthAccelerator.ImportCodeableConcepts.csproj", "{8FE516E9-688A-4DCD-97D7-3DDD1770930F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDM.HealthAccelerator.GenerateSampleData", "CDM.HealthAccelerator.SampleDataGenerator\CDM.HealthAccelerator.GenerateSampleData.csproj", "{5CDBBB74-3740-40A5-ADCC-952847B46DE8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{09436E5B-F00F-49AC-B015-C1E10C68EA6F}"
+	ProjectSection(SolutionItems) = preProject
+		IMPORTANT_READ_ME.txt = IMPORTANT_READ_ME.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C5E0A77-0D55-47D3-ACF1-5D1720E16724}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C5E0A77-0D55-47D3-ACF1-5D1720E16724}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C5E0A77-0D55-47D3-ACF1-5D1720E16724}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C5E0A77-0D55-47D3-ACF1-5D1720E16724}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40B71789-6814-4EE9-8C8B-C06D8B97A5B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40B71789-6814-4EE9-8C8B-C06D8B97A5B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40B71789-6814-4EE9-8C8B-C06D8B97A5B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40B71789-6814-4EE9-8C8B-C06D8B97A5B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3CB90C5-DCC2-4585-BB62-511B19EF8CE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3CB90C5-DCC2-4585-BB62-511B19EF8CE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3CB90C5-DCC2-4585-BB62-511B19EF8CE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3CB90C5-DCC2-4585-BB62-511B19EF8CE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FE516E9-688A-4DCD-97D7-3DDD1770930F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE516E9-688A-4DCD-97D7-3DDD1770930F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FE516E9-688A-4DCD-97D7-3DDD1770930F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE516E9-688A-4DCD-97D7-3DDD1770930F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CDBBB74-3740-40A5-ADCC-952847B46DE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CDBBB74-3740-40A5-ADCC-952847B46DE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CDBBB74-3740-40A5-ADCC-952847B46DE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CDBBB74-3740-40A5-ADCC-952847B46DE8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8
+	EndGlobalSection
+EndGlobal
