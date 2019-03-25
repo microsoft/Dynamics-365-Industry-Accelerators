@@ -68,11 +68,22 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
+        public static string GenerateRandomNumber(int places = 8)
+        {
+            string randomNumber = string.Empty;
+
+            for (int i = 0; i < places; i++)
+            {
+                randomNumber += BaseRandomGenerator.Next(1, 9).ToString();
+            }
+
+            return randomNumber;
+        }
         /// <summary>
         /// Use this to help generate fake information for a contact
         /// </summary>
         public static readonly Random BaseRandomGenerator = new Random();
 
-        public static SampleDataCache.RandomDateTime birthDayRandomGenerator = new SampleDataCache.RandomDateTime(1955, 1, 1, new DateTime(2000, 1, 1));
+        public static SampleDataCache.GenerateRandomDateTime birthDayRandomGenerator = new SampleDataCache.GenerateRandomDateTime(1955, 1, 1, new DateTime(2000, 1, 1));
     }
 }

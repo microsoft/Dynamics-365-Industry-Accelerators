@@ -210,14 +210,11 @@ namespace CDM.HealthAccelerator.DataModel
         }
 
 
-        /// <summary>
-        /// 23ea4e7f-6781-4666-b5b9-ebb59a9cce61
-        /// </summary>
         public override sealed void InitializeEntity()
         {
-            Name = SampleDataCache.PractitionerRoles[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.PractitionerRoles.Count - 1)];
+            Name = SampleDataCache.PractitionerRoles[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.PractitionerRoles.Count - 1)];
 
-            SampleDataCache.RandomDateTime rdt = new SampleDataCache.RandomDateTime(2010, 1, 1, DateTime.Today);
+            SampleDataCache.GenerateRandomDateTime rdt = new SampleDataCache.GenerateRandomDateTime(2010, 1, 1, DateTime.Today);
 
             DateTime startDate = rdt.Next();
             DateTime endDate = rdt.AddYears(startDate, 5, 10);
@@ -269,31 +266,7 @@ namespace CDM.HealthAccelerator.DataModel
                     //enable using proxy types
                     _serviceProxy.EnableProxyTypes();
 
-                    HealthCDM.msemr_practitionerrole addPractitionerRole = new HealthCDM.msemr_practitionerrole();
-
-                    addPractitionerRole.msemr_Practitioner = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse(PractitionerId));
-                    addPractitionerRole.msemr_PeriodEnddatetime = PeriodEndDate;
-                    addPractitionerRole.msemr_PeriodStartdatetime = PeriodStartDate;
-                    addPractitionerRole.msemr_name = Name;
-
-                    try
-                    {
-                        practitionerRoleId = _serviceProxy.Create(addPractitionerRole);
-
-                        if (practitionerRoleId != Guid.Empty)
-                        {
-                            RoleId = practitionerRoleId.ToString();
-                            Console.WriteLine("Created Practitioner Role [" + RoleId + "] for Practitioner [" + PractitionerId + "]");
-                        }
-                        else
-                        {
-                            throw new Exception("RoleId == null");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.ToString());
-                    }
+                    practitionerRoleId = WriteToCDS(_serviceProxy);
                 }
             }
             catch (Exception ex)
@@ -337,9 +310,5 @@ namespace CDM.HealthAccelerator.DataModel
             return practitionerRoleId;
         }
 
-        public static void ExportToJson(string filename, List<Profile> profiles)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

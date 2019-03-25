@@ -1,0 +1,25 @@
+﻿Neurology Specialist
+Nuerologist
+Primary Care Physician
+Dermatologist
+Radiologist
+Oncologist
+Gastroenterologist
+Ophthalmologist
+Infectious disease/HIV physician
+Plastic surgeon
+Anesthesiologist
+Orthopedic surgeon
+Psychiatrist
+Rheumatologist
+Podiatrist
+Emergency medicine physician
+Urologist
+Cardiologist
+Pediatrician
+Diabetes specialist/Endocrinologist
+Neurologist
+General surgeon
+Nephrologist
+Obstetrician/Gynecologist
+Pulmonologist

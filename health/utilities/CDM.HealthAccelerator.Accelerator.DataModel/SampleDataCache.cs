@@ -24,13 +24,13 @@ namespace CDM.HealthAccelerator.DataModel
 {
     public static class SampleDataCache
     {
-        public class RandomDateTime
+        public class GenerateRandomDateTime
         {
             DateTime start;
             Random gen;
             int range;
 
-            public RandomDateTime(int year, int day, int month, DateTime startDate)
+            public GenerateRandomDateTime(int year, int day, int month, DateTime startDate)
             {
                 start = new DateTime(year, month, day);
                 gen = new Random();
@@ -46,12 +46,25 @@ namespace CDM.HealthAccelerator.DataModel
             {
                 return currentdt.AddYears(gen.Next(min, max));
             }
+            public DateTime AddDays(DateTime currentdt, int min, int max)
+            {
+                return currentdt.AddDays(gen.Next(min, max));
+            }
+            public DateTime AddHours(DateTime currentdt, int min, int max)
+            {
+                return currentdt.AddHours(gen.Next(min, max));
+            }
+            public DateTime AddMinutes(DateTime currentdt, int min, int max)
+            {
+                return currentdt.AddMinutes(gen.Next(min, max));
+            }
+
         }
 
         /// <summary>
         /// Use this to help generate fake information for a contact
         /// </summary>
-        public static readonly Random RandomContactGenerator = new Random();
+        public static readonly Random SelectRandomItem = new Random();
         /// <summary>
         /// this is used to randomize data for these fields
         /// the address line is not included but this data is real from census
@@ -64,21 +77,21 @@ namespace CDM.HealthAccelerator.DataModel
             {
                 this.Country = Country;
 
-                this.Telephone = RandomContactGenerator.Next(1, 9).ToString()
-                                 + RandomContactGenerator.Next(1, 9).ToString()
-                                 + RandomContactGenerator.Next(1, 9).ToString() + "-"
-                                 + RandomContactGenerator.Next(1, 9).ToString()
-                                 + RandomContactGenerator.Next(1, 9).ToString()
-                                 + RandomContactGenerator.Next(1, 9).ToString()
-                                 + RandomContactGenerator.Next(1, 9).ToString();
+                this.Telephone = SelectRandomItem.Next(1, 9).ToString()
+                                 + SelectRandomItem.Next(1, 9).ToString()
+                                 + SelectRandomItem.Next(1, 9).ToString() + "-"
+                                 + SelectRandomItem.Next(1, 9).ToString()
+                                 + SelectRandomItem.Next(1, 9).ToString()
+                                 + SelectRandomItem.Next(1, 9).ToString()
+                                 + SelectRandomItem.Next(1, 9).ToString();
 
-                this.Address = RandomContactGenerator.Next(1, 9).ToString()
-                               + RandomContactGenerator.Next(1, 9).ToString()
-                               + RandomContactGenerator.Next(1, 9).ToString()
-                               + RandomContactGenerator.Next(1, 9).ToString() + " "
-                               + Lastnames[RandomContactGenerator.Next(0, Lastnames.Count - 1)];
+                this.Address = SelectRandomItem.Next(1, 9).ToString()
+                               + SelectRandomItem.Next(1, 9).ToString()
+                               + SelectRandomItem.Next(1, 9).ToString()
+                               + SelectRandomItem.Next(1, 9).ToString() + " "
+                               + Lastnames[SelectRandomItem.Next(0, Lastnames.Count - 1)];
 
-                int streettype = RandomContactGenerator.Next(1, 100);
+                int streettype = SelectRandomItem.Next(1, 100);
 
                 if (streettype < 25)
                 {
@@ -297,14 +310,22 @@ namespace CDM.HealthAccelerator.DataModel
         internal static readonly List<string> Procedures = new List<string>();
 
         internal static readonly List<string> Medications = new List<string>();
-        
+
+        internal static readonly List<string> Manufacturers = new List<string>();
+
+        internal static readonly List<string> Accounts = new List<string>();
+
+        internal static readonly List<string> DeviceModels = new List<string>();
+
+        internal static readonly Dictionary<string, CodeableConcept> CodeableConcepts = new Dictionary<string, CodeableConcept>();
+
         internal static bool CacheInitted = false;
         internal static object cachelock = new object();
 
         /// <summary>
         /// this is used to initialize our fake data and create it
         /// </summary>
-        internal static void InitializeFakeDataHelpers()
+        internal static void InitializeDataCache()
         {
             lock (cachelock)
             {
@@ -330,6 +351,81 @@ namespace CDM.HealthAccelerator.DataModel
                         }
                     }
 
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\codeableconceptvalues.txt"))
+                    {
+                        while (true)
+                        {
+                            string concept = reader.ReadLine();
+
+                            if (!string.IsNullOrEmpty(concept))
+                            {
+                                try
+                                {
+                                    string code = (concept.Split('\t')[0]).Trim();
+                                    string value = (concept.Split('\t')[1]).Trim();
+                                    string codeconcept = ((concept.Split('\t')[2]).Trim()).Replace(" ", ""); // this will now much the mserm_codeableconcept_type enum
+
+                                    CodeableConcept outConcept;
+
+                                    bool exists = CodeableConcepts.TryGetValue(codeconcept, out outConcept);
+
+                                    if (!exists)
+                                    {
+                                        outConcept = new CodeableConcept();
+                                        outConcept.Name = codeconcept; 
+
+                                        CodeableConcepts.Add(codeconcept, outConcept);
+                                    }
+
+                                    // add the value
+                                    outConcept.Values.Add(code, value);
+                                }
+                                catch (Exception tt)
+                                {
+                                    System.Diagnostics.Debug.WriteLine(tt.ToString());
+                                }
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\devicemodels.txt"))
+                    {
+                        while (true)
+                        {
+                            string devicemodel = reader.ReadLine();
+
+                            if (!string.IsNullOrEmpty(devicemodel))
+                            {
+                                DeviceModels.Add(devicemodel);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\accounts.txt"))
+                    {
+                        while (true)
+                        {
+                            string account = reader.ReadLine();
+
+                            if (!string.IsNullOrEmpty(account))
+                            {
+                                Accounts.Add(account);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+
                     using (TextReader reader = File.OpenText(filepath + @"resourcefiles\medications.txt"))
                     {
                         while (true)
@@ -339,6 +435,23 @@ namespace CDM.HealthAccelerator.DataModel
                             if (!string.IsNullOrEmpty(medication))
                             {
                                  Medications.Add(medication);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    using (TextReader reader = File.OpenText(filepath + @"resourcefiles\manufacturers.txt"))
+                    {
+                        while (true)
+                        {
+                            string manufacturer = reader.ReadLine();
+
+                            if (!string.IsNullOrEmpty(manufacturer))
+                            {
+                                Manufacturers.Add(manufacturer);
                             }
                             else
                             {

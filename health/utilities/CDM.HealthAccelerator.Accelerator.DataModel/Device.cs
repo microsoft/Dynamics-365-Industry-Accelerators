@@ -45,9 +45,13 @@ namespace CDM.HealthAccelerator.DataModel
         private DateTime expirationDate;
         private string patientId;
         private string deviceId;
+        private string manufacturer;
+        private string carrierAIDC;
+        private string locationId;
+
+        private DateTime manufacturedDate;
 
         private int deviceStatus;
-
 
         public string DeviceId
         {
@@ -153,19 +157,74 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
+        public string Manufacturer
+        {
+            get
+            {
+                return manufacturer;
+            }
+
+            set
+            {
+                manufacturer = value;
+            }
+        }
+
+        public DateTime ManufacturedDate
+        {
+            get
+            {
+                return manufacturedDate;
+            }
+
+            set
+            {
+                manufacturedDate = value;
+            }
+        }
+
+        public string CarrierAIDC
+        {
+            get
+            {
+                return carrierAIDC;
+            }
+
+            set
+            {
+                carrierAIDC = value;
+            }
+        }
+
+        public string LocationId
+        {
+            get
+            {
+                return locationId;
+            }
+
+            set
+            {
+                locationId = value;
+            }
+        }
+
         public override void InitializeEntity()
         {
             DeviceNumber = GenerateDeviceNumber();
             Version = GenerateDeviceVersion();
-            Model = GenerateModelNumber();
+            Model = SampleDataCache.DeviceModels[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.DeviceModels.Count - 1)]; ;
+            Manufacturer = SampleDataCache.Manufacturers[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.Manufacturers.Count - 1)]; ;
 
-            SampleDataCache.RandomDateTime rdt = new SampleDataCache.RandomDateTime(2017, 1, 1, new DateTime(2022,1,1));
+            SampleDataCache.GenerateRandomDateTime rdt = new SampleDataCache.GenerateRandomDateTime(2017, 1, 1, new DateTime(2022,1,1));
 
             ExpirationDate = rdt.Next();
+            ManufacturedDate = rdt.Next();
 
-            Name = SampleDataCache.Devices[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.Devices.Count - 1)];
+            Name = SampleDataCache.Devices[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.Devices.Count - 1)];
             DeviceStatus = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.Device_Devicestatus>();
 
+            CarrierAIDC = GenerateCarrierAIDC();
         }
 
         public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
@@ -210,34 +269,7 @@ namespace CDM.HealthAccelerator.DataModel
                     //enable using proxy types
                     _serviceProxy.EnableProxyTypes();
 
-                    HealthCDM.msemr_device addPatientDevice = new HealthCDM.msemr_device();
-
-                    addPatientDevice.msemr_Patient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse(PatientId));
-                    addPatientDevice.msemr_DeviceNumber = DeviceNumber;
-                    addPatientDevice.msemr_Version = Version;
-                    addPatientDevice.msemr_Model = Model;
-                    addPatientDevice.msemr_ExpirationDate = ExpirationDate;
-                    addPatientDevice.msemr_name = Name;
-                    addPatientDevice.msemr_DeviceStatus = new OptionSetValue(DeviceStatus);
-
-                    try
-                    {
-                        patientDeviceId = _serviceProxy.Create(addPatientDevice);
-
-                        if (patientDeviceId != Guid.Empty)
-                        {
-                            DeviceId = patientDeviceId.ToString();
-                            Console.WriteLine("Created Device [" + DeviceId + "] for Patient [" + PatientId + "]");
-                        }
-                        else
-                        {
-                            throw new Exception("DeviceId == null");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.ToString());
-                    }
+                    patientDeviceId = WriteToCDS(_serviceProxy);
                 }
             }
             catch (Exception ex)
@@ -252,18 +284,23 @@ namespace CDM.HealthAccelerator.DataModel
         {
             Guid patientDeviceId = Guid.Empty;
 
-            HealthCDM.msemr_device addPatientDevice = new HealthCDM.msemr_device();
-
-            addPatientDevice.msemr_Patient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse(PatientId));
-            addPatientDevice.msemr_DeviceNumber = DeviceNumber;
-            addPatientDevice.msemr_Version = Version;
-            addPatientDevice.msemr_Model = Model;
-            addPatientDevice.msemr_ExpirationDate = ExpirationDate;
-            addPatientDevice.msemr_name = Name;
-            addPatientDevice.msemr_DeviceStatus = new OptionSetValue(DeviceStatus);
-
             try
             {
+
+                HealthCDM.msemr_device addPatientDevice = new HealthCDM.msemr_device();
+
+                addPatientDevice.msemr_Patient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse(PatientId));
+                addPatientDevice.msemr_DeviceNumber = DeviceNumber;
+                addPatientDevice.msemr_Version = Version;
+                addPatientDevice.msemr_Model = Model;
+                addPatientDevice.msemr_ExpirationDate = ExpirationDate;
+                addPatientDevice.msemr_name = Name;
+                addPatientDevice.msemr_DeviceStatus = new OptionSetValue(DeviceStatus);
+                addPatientDevice.msemr_Manufacturer = Manufacturer;
+                addPatientDevice.msemr_ManufacturerDate = ManufacturedDate;
+                addPatientDevice.msemr_CarrierAIDC = CarrierAIDC;
+                addPatientDevice.msemr_Location = new EntityReference(HealthCDM.msemr_location.EntityLogicalName, new Guid(LocationId));
+
                 patientDeviceId = _serviceProxy.Create(addPatientDevice);
 
                 if (patientDeviceId != Guid.Empty)
@@ -283,10 +320,9 @@ namespace CDM.HealthAccelerator.DataModel
             return patientDeviceId;
         }
 
-        public static string GenerateDeviceVersion()
+        private string GenerateDeviceVersion()
         {
-            return "Version "
-                + BaseRandomGenerator.Next(1, 3).ToString() + "."
+            return BaseRandomGenerator.Next(1, 3).ToString() + "."
                 + BaseRandomGenerator.Next(1, 9).ToString()
                 + BaseRandomGenerator.Next(1, 6).ToString()
                 + BaseRandomGenerator.Next(1, 3).ToString() + "."
@@ -295,33 +331,14 @@ namespace CDM.HealthAccelerator.DataModel
                 + BaseRandomGenerator.Next(1, 3).ToString();
         }
 
-        public static string GenerateDeviceNumber()
+        private string GenerateDeviceNumber()
         {
-            return "Device Number: "
-                + BaseRandomGenerator.Next(1, 9).ToString() + "."
-                + BaseRandomGenerator.Next(1, 9).ToString()
-                + BaseRandomGenerator.Next(1, 6).ToString() + "."
-                + BaseRandomGenerator.Next(1, 3).ToString() 
-                + BaseRandomGenerator.Next(1, 9).ToString() + "."
-                + BaseRandomGenerator.Next(1, 6).ToString()
-                + BaseRandomGenerator.Next(1, 3).ToString();
+            return GenerateRandomNumber(10);
         }
 
-        public static string GenerateModelNumber()
+        public string GenerateCarrierAIDC()
         {
-            return "Model Number: "
-                + BaseRandomGenerator.Next(1, 9).ToString() + "."
-                + BaseRandomGenerator.Next(1, 9).ToString()
-                + BaseRandomGenerator.Next(1, 6).ToString() + "."
-                + BaseRandomGenerator.Next(1, 3).ToString() 
-                + BaseRandomGenerator.Next(1, 9).ToString()
-                + BaseRandomGenerator.Next(1, 6).ToString()
-                + BaseRandomGenerator.Next(1, 3).ToString();
-        }
-
-        public static void ExportToJson(string filename, List<Profile> profiles)
-        {
-            throw new NotImplementedException();
+            return GenerateRandomNumber(12);
         }
     }
 }

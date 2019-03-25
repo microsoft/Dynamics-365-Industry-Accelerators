@@ -18,7 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CDM.HealthAccelerator.ExportOptionSetValues
+namespace CDM.HealthAccelerator.GenerateEnums
 {
     [Serializable]
     public class PickListEnums

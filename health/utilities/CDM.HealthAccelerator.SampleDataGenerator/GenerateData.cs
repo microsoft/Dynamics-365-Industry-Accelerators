@@ -33,7 +33,7 @@ namespace CDM.HealthAccelerator.GenerateSampleData
 
         #endregion
 
-        #region Create Codeable Concept Maps
+        #region Create Sample Data
         /// <summary>
         /// Demonstrates sharing records by exercising various access messages including:
         /// Grant, Modify, Revoke, RetrievePrincipalAccess, and 
@@ -57,6 +57,11 @@ namespace CDM.HealthAccelerator.GenerateSampleData
                     // This statement is required to enable early-bound type support.
                     _serviceProxy.EnableProxyTypes();
 
+                    int accountcount = int.Parse(ConfigurationManager.AppSettings["cdm:createaccountcount"]);
+                    int locationcount = int.Parse(ConfigurationManager.AppSettings["cdm:createlocationcount"]);
+
+                    int productcount = int.Parse(ConfigurationManager.AppSettings["cdm:createproductcount"]);
+
                     int patientcount = int.Parse(ConfigurationManager.AppSettings["cdm:createpatientcount"]);
                     int practitionercount = int.Parse(ConfigurationManager.AppSettings["cdm:createpractitionercount"]);
                     int relatedpersoncount = int.Parse(ConfigurationManager.AppSettings["cdm:createrelatedpersoncount"]);
@@ -72,6 +77,10 @@ namespace CDM.HealthAccelerator.GenerateSampleData
                     int patientprocedurecount = int.Parse(ConfigurationManager.AppSettings["cdm:patientprocedurecount"]);
                     int patientreferralcount = int.Parse(ConfigurationManager.AppSettings["cdm:patientreferralcount"]);
                     int patientmedicationrequestcount = int.Parse(ConfigurationManager.AppSettings["cdm:patientmedicationrequestcount"]);
+                    int patientepisodesofcarecount = int.Parse(ConfigurationManager.AppSettings["cdm:patientepisodesofacarecount"]);
+                    int patientappointmentcount = int.Parse(ConfigurationManager.AppSettings["cdm:patientappointmentcount"]);
+                    int patientencountercount = int.Parse(ConfigurationManager.AppSettings["cdm:patientencountercount"]);
+                    int patientcareplancount = int.Parse(ConfigurationManager.AppSettings["cdm:patientcareplancount"]);
 
                     string filepath = ConfigurationManager.AppSettings["cdm:temporaryfilepath"];
 
@@ -81,33 +90,109 @@ namespace CDM.HealthAccelerator.GenerateSampleData
                     List<Profile> localpatients = null;
                     List<Profile> localpractitioners = null;
                     List<Profile> localrelatedpersons = null;
+                    List<Profile> localaccounts = null;
+                    List<Profile> locallocations = null;
+                    List<Medication> localmedications = null;
 
                     string practitonerFile = string.Empty;
                     string relatedpersonsFile = string.Empty;
                     string patientsFile = string.Empty;
+                    string accountsFile = string.Empty;
+                    string locationsFile = string.Empty;
+                    string medicationsFile = string.Empty;
 
-                    #region Create Standard Contancts 
+
+                    #region Create Products, Pricelists
+                    if (productcount > 0)
+                    {
+                        CreateCDMHealthData createProducts = new CreateCDMHealthData();
+                        createProducts.ProfileType = Profile.ProfileType.Medication;
+                        createProducts.FileName = filepath + "medications_" + accountcount.ToString() + "_" + Guid.NewGuid().ToString() + ".json";
+
+                        // we only ever generate a single instance, unless you want more than 1 product on seperate price lists
+                        // this will generate N products on the same price list through one object instance (unlike others)
+                        localmedications = Medication.GenerateProfilesByCount(productcount, productcount);
+
+                        createProducts.CreateCount = createProducts.IncomingProfiles.Count;
+                        createProducts.Clients = int.Parse(ConfigurationManager.AppSettings["cdm:clients"]);
+                        Console.WriteLine("\r\nCreating [" + createProducts.CreateCount.ToString() + "]  Medications [products]\r\n");
+
+                        createProducts.CreateProducts(_serviceProxy, localmedications);
+                    }
+
+                    #endregion
+
+                    #region Create Accounts (Organizations)
+
+                    if (accountcount > 0)
+                    {
+                        CreateCDMHealthData createAccounts = new CreateCDMHealthData();
+                        createAccounts.ProfileType = Profile.ProfileType.Organization;
+                        createAccounts.FileName = filepath + "organizations_" + accountcount.ToString() + "_" + Guid.NewGuid().ToString() + ".json";
+
+                        localaccounts = Organization.GenerateProfilesByCount(accountcount, "NA");
+
+                        foreach (Organization account in localaccounts)
+                        {
+                            createAccounts.IncomingProfiles.Enqueue(account);
+                        }
+
+                        createAccounts.CreateCount = createAccounts.IncomingProfiles.Count;
+                        createAccounts.Clients = int.Parse(ConfigurationManager.AppSettings["cdm:clients"]);
+                        Console.WriteLine("\r\nCreating [" + createAccounts.CreateCount.ToString() + "]  Organizations\r\n");
+
+                        accountsFile = createAccounts.CreateProfiles(_serviceProxy);
+                    }
+
+                    #endregion
+
+                    #region Create Locations
+
+                    if (locationcount > 0)
+                    {
+                        CreateCDMHealthData createLocations = new CreateCDMHealthData();
+                        createLocations.ProfileType = Profile.ProfileType.Location;
+                        createLocations.FileName = filepath + "locations_" + locationcount.ToString() + "_" + Guid.NewGuid().ToString() + ".json";
+
+                        locallocations = Location.GenerateProfilesByCount(locationcount, accountsFile);
+
+                        foreach (Location location in locallocations)
+                        {
+                            createLocations.IncomingProfiles.Enqueue(location);
+                        }
+
+                        createLocations.CreateCount = createLocations.IncomingProfiles.Count;
+                        createLocations.Clients = int.Parse(ConfigurationManager.AppSettings["cdm:clients"]);
+
+                        Console.WriteLine("\r\nCreating [" + createLocations.CreateCount.ToString() + "]  Locations\r\n");
+
+                        locationsFile = createLocations.CreateProfiles(_serviceProxy);
+                    }
+
+                    #endregion
+
+                    #region Create Standard Contacts 
 
                     if (contactcount > 0)
                     {
                         CreateCDMHealthData createContacts = new CreateCDMHealthData();
-                        createContacts.ContactType = Profile.ContactType.Standard;
+                        createContacts.ProfileType = Profile.ProfileType.Standard;
                         createContacts.FileName = filepath + "relatedpersons_" + relatedpersoncount.ToString() + "_" + Guid.NewGuid().ToString() + ".tab";
 
                         localcontacts = Contact.GenerateProfilesByCount(contactcount, "NA");
 
                         foreach (Profile contact in localcontacts)
                         {
-                            createContacts.IncomingContacts.Enqueue(contact);
+                            createContacts.IncomingProfiles.Enqueue(contact);
                         }
 
-                        createContacts.CreateCount = createContacts.IncomingContacts.Count;
+                        createContacts.CreateCount = createContacts.IncomingProfiles.Count;
                         createContacts.EmailDomain = ConfigurationManager.AppSettings["cdm:emaildomain"];
                         createContacts.Clients = int.Parse(ConfigurationManager.AppSettings["cdm:clients"]); 
 
                         Console.WriteLine("\r\nCreating [" + createContacts.CreateCount.ToString() + "]  Contacts\r\n");
 
-                        practitonerFile = createContacts.CreateContacts(_serviceProxy);
+                        practitonerFile = createContacts.CreateProfiles(_serviceProxy);
                     }
 
                     #endregion
@@ -121,23 +206,23 @@ namespace CDM.HealthAccelerator.GenerateSampleData
                         configuration.Roles = practitionerrolecount;
 
                         CreateCDMHealthData createPractitioners = new CreateCDMHealthData();
-                        createPractitioners.ContactType = Profile.ContactType.Practitioner;
+                        createPractitioners.ProfileType = Profile.ProfileType.Practitioner;
                         createPractitioners.FileName = filepath + "practitioners_" + practitionercount.ToString() + "_" + Guid.NewGuid().ToString() + ".json";
 
                         localpractitioners = Practitioner.GenerateProfilesByCount(practitionercount, configuration);
 
                         foreach (Profile practitioner in localpractitioners)
                         {
-                            createPractitioners.IncomingContacts.Enqueue(practitioner);
+                            createPractitioners.IncomingProfiles.Enqueue(practitioner);
                         }
 
-                        createPractitioners.CreateCount = createPractitioners.IncomingContacts.Count;
+                        createPractitioners.CreateCount = createPractitioners.IncomingProfiles.Count;
                         createPractitioners.EmailDomain = ConfigurationManager.AppSettings["cdm:emaildomain"];
                         createPractitioners.Clients = int.Parse(ConfigurationManager.AppSettings["cdm:clients"]); //;
 
                         Console.WriteLine("\r\nCreating [" + createPractitioners.CreateCount.ToString() + "]  Practitioners\r\n");
 
-                        practitonerFile = createPractitioners.CreateContacts(_serviceProxy);
+                        practitonerFile = createPractitioners.CreateProfiles(_serviceProxy);
                     }
 
                     #endregion
@@ -147,22 +232,22 @@ namespace CDM.HealthAccelerator.GenerateSampleData
                     {
                         CreateCDMHealthData createRelatedPersons = new CreateCDMHealthData();
                         createRelatedPersons.FileName = filepath + "relatedpersons_" + relatedpersoncount.ToString() + "_" + Guid.NewGuid().ToString() + ".json";
-                        createRelatedPersons.ContactType = Profile.ContactType.RelatedPerson;
+                        createRelatedPersons.ProfileType = Profile.ProfileType.RelatedPerson;
 
                         localrelatedpersons = RelatedPerson.GenerateProfilesByCount(relatedpersoncount, "NA");
 
                         foreach (Profile relatedperson in localrelatedpersons)
                         {
-                            createRelatedPersons.IncomingContacts.Enqueue(relatedperson);
+                            createRelatedPersons.IncomingProfiles.Enqueue(relatedperson);
                         }
 
-                        createRelatedPersons.CreateCount = createRelatedPersons.IncomingContacts.Count;
+                        createRelatedPersons.CreateCount = createRelatedPersons.IncomingProfiles.Count;
                         createRelatedPersons.EmailDomain = ConfigurationManager.AppSettings["cdm:emaildomain"];
                         createRelatedPersons.Clients = int.Parse(ConfigurationManager.AppSettings["cdm:clients"]); //;
 
                         Console.WriteLine("\r\nCreating [" + createRelatedPersons.CreateCount.ToString() + "]  Related Persons\r\n");
 
-                        relatedpersonsFile = createRelatedPersons.CreateContacts(_serviceProxy);
+                        relatedpersonsFile = createRelatedPersons.CreateProfiles(_serviceProxy);
                     }
 
                     #endregion
@@ -174,31 +259,39 @@ namespace CDM.HealthAccelerator.GenerateSampleData
                         PatientConfiguration configuration = new PatientConfiguration();
                         configuration.PractionerFileName = practitonerFile;
                         configuration.RelatedPersonsFileName = relatedpersonsFile;
+                        configuration.AccountsFileName = accountsFile;
+                        configuration.LocationsFileName = locationsFile;
+
                         configuration.AllergyIntoleranceCount = patientallergycount;
                         configuration.NutritionOrderCount = patientnutritionordercount;
                         configuration.ConditionCount = patientconditioncount;
                         configuration.DeviceCount = patientdevicecount;
                         configuration.ProcedureCount = patientprocedurecount;
                         configuration.MedicationCount = patientmedicationrequestcount;
+                        configuration.EpisodesOfCareCount = patientepisodesofcarecount;
+                        configuration.EncountersCount = patientencountercount;
+                        configuration.AppointmentCount = patientappointmentcount;
+                        configuration.CarePlanCount = patientcareplancount;
 
                         CreateCDMHealthData createPatients = new CreateCDMHealthData();
                         createPatients.FileName = filepath + "patients_" + patientcount.ToString() + "_" + Guid.NewGuid().ToString() + ".json";
-                        createPatients.ContactType = Profile.ContactType.Patient;
+                        createPatients.ProfileType = Profile.ProfileType.Patient;
 
                         localpatients = Patient.GenerateProfilesByCount(patientcount, configuration);
 
                         foreach (Profile patient in localpatients)
                         {
-                            createPatients.IncomingContacts.Enqueue(patient);
+                            ((Patient)(patient)).Products = localmedications;
+                            createPatients.IncomingProfiles.Enqueue(patient);
                         }
 
-                        createPatients.CreateCount = createPatients.IncomingContacts.Count;
+                        createPatients.CreateCount = createPatients.IncomingProfiles.Count;
                         createPatients.EmailDomain = ConfigurationManager.AppSettings["cdm:emaildomain"];
                         createPatients.Clients = int.Parse(ConfigurationManager.AppSettings["cdm:clients"]); //;
 
                         Console.WriteLine("\r\nCreating [" + createPatients.CreateCount.ToString() + "]  Patients\r\n");
 
-                        patientsFile = createPatients.CreateContacts(_serviceProxy);
+                        patientsFile = createPatients.CreateProfiles(_serviceProxy);
                     }
 
                     #endregion

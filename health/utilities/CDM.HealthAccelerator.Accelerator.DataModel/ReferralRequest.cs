@@ -32,22 +32,32 @@ namespace CDM.HealthAccelerator.DataModel
             InitializeEntity();
         }
 
-        public ReferralRequest(string patientid, string practitionerid)
+        public ReferralRequest(string patientid, string practitionerid, string encounterid, string appointmentid)
         {
             PatientId = patientid;
             PractitionerId = practitionerid;
+            EncounterId = encounterid;
+            AppointmentId = appointmentid;
             InitializeEntity();
         }
+
+        #region Attributes
 
         private string patientId;
         private string practitionerId;
         private string description;
         private int priority;
         private int status;
-        private int type;
+        private int contextType;
         private DateTime occurrendateDate;
         private int intent;
         private string referralRequestId;
+        private int subject;
+        private string referralRequestNumber;
+        private int requestAgent;
+        private int occurrenceType;
+        private string encounterId;
+        private string appointmentId;
 
         public string PatientId
         {
@@ -114,16 +124,16 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
-        public int Type
+        public int ContextType
         {
             get
             {
-                return type;
+                return contextType;
             }
 
             set
             {
-                type = value;
+                contextType = value;
             }
         }
 
@@ -166,14 +176,100 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
+        public int Subject
+        {
+            get
+            {
+                return subject;
+            }
+
+            set
+            {
+                subject = value;
+            }
+        }
+
+        public string ReferralRequestNumber
+        {
+            get
+            {
+                return referralRequestNumber;
+            }
+
+            set
+            {
+                referralRequestNumber = value;
+            }
+        }
+
+        public int RequestAgent
+        {
+            get
+            {
+                return requestAgent;
+            }
+
+            set
+            {
+                requestAgent = value;
+            }
+        }
+
+        public int OccurrenceType
+        {
+            get
+            {
+                return occurrenceType;
+            }
+
+            set
+            {
+                occurrenceType = value;
+            }
+        }
+
+        public string EncounterId
+        {
+            get
+            {
+                return encounterId;
+            }
+
+            set
+            {
+                encounterId = value;
+            }
+        }
+
+        public string AppointmentId
+        {
+            get
+            {
+                return appointmentId;
+            }
+
+            set
+            {
+                appointmentId = value;
+            }
+        }
+
+        #endregion
+
+
         public override void InitializeEntity()
         {
-            Description = SampleDataCache.ReferralRequests[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.ReferralRequests.Count - 1)];
+            Description = SampleDataCache.ReferralRequests[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.ReferralRequests.Count - 1)];
             Status = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.ReferralRequest_Status>();
             Intent = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.ReferralRequest_Intent>();
             Priority = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.ReferralRequest_Priority>();
+            ContextType = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.ReferralRequest_Contexttype>();
+            Subject = (int)HealthCDMEnums.ReferralRequest_Subject.Patient;
+            ReferralRequestNumber = GenerateRandomNumber(8);
+            RequestAgent = (int)HealthCDMEnums.ReferralRequest_Requesteragent.Practitioner;
+            OccurrenceType = (int)HealthCDMEnums.ReferralRequest_Occurrencetype.Date;
 
-            SampleDataCache.RandomDateTime rdt = new SampleDataCache.RandomDateTime(2017, 1, 1, (DateTime.Today.AddDays(90)));
+            SampleDataCache.GenerateRandomDateTime rdt = new SampleDataCache.GenerateRandomDateTime(2017, 1, 1, (DateTime.Today.AddDays(90)));
             OccurrendateDate = rdt.Next();
         }
 
@@ -219,35 +315,7 @@ namespace CDM.HealthAccelerator.DataModel
                     //enable using proxy types
                     _serviceProxy.EnableProxyTypes();
 
-                    HealthCDM.msemr_referralrequest addReferrralRequest = new HealthCDM.msemr_referralrequest();
-
-                    addReferrralRequest.msemr_SubjectPatient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PatientId)));
-                    addReferrralRequest.msemr_Requestor = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PractitionerId)));
-                    addReferrralRequest.msemr_Status = new OptionSetValue(Status);
-                    addReferrralRequest.msemr_OccurrenceDate = OccurrendateDate;
-                    addReferrralRequest.msemr_Description = Description;
-                    addReferrralRequest.msemr_Priority = new OptionSetValue(Priority);
-                    addReferrralRequest.msemr_Intent = new OptionSetValue(Intent);
-                    addReferrralRequest.msemr_name = Description;
-
-                    try
-                    {
-                        referralrequestId = _serviceProxy.Create(addReferrralRequest);
-
-                        if (referralrequestId != Guid.Empty)
-                        {
-                            ReferralRequestId = referralrequestId.ToString();
-                            Console.WriteLine("Created Patient Referral Request [" + ReferralRequestId + "] for Patient [" + PatientId + "]");
-                        }
-                        else
-                        {
-                            throw new Exception("ReferralRequestId == null");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.ToString());
-                    }
+                    referralrequestId = WriteToCDS(_serviceProxy);
                 }
             }
             catch (Exception ex)
@@ -262,20 +330,27 @@ namespace CDM.HealthAccelerator.DataModel
         {
             Guid referralrequestId = Guid.Empty;
 
-            HealthCDM.msemr_referralrequest addReferrralRequest = new HealthCDM.msemr_referralrequest();
+            HealthCDM.msemr_referralrequest addReferralRequest = new HealthCDM.msemr_referralrequest();
 
-            addReferrralRequest.msemr_SubjectPatient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PatientId)));
-            addReferrralRequest.msemr_Requestor = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PractitionerId)));
-            addReferrralRequest.msemr_Status = new OptionSetValue(Status);
-            addReferrralRequest.msemr_OccurrenceDate = OccurrendateDate;
-            addReferrralRequest.msemr_Description = Description;
-            addReferrralRequest.msemr_Priority = new OptionSetValue(Priority);
-            addReferrralRequest.msemr_Intent = new OptionSetValue(Intent);
-            addReferrralRequest.msemr_name = Description;
+            addReferralRequest.msemr_SubjectPatient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PatientId)));
+            addReferralRequest.msemr_Requestor = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PractitionerId)));
+            addReferralRequest.msemr_Status = new OptionSetValue(Status);
+            addReferralRequest.msemr_OccurrenceDate = OccurrendateDate;
+            addReferralRequest.msemr_Description = Description;
+            addReferralRequest.msemr_Priority = new OptionSetValue(Priority);
+            addReferralRequest.msemr_Intent = new OptionSetValue(Intent);
+            addReferralRequest.msemr_name = Description;
+            addReferralRequest.msemr_ContextType = new OptionSetValue(contextType);
+            addReferralRequest.msemr_Subject = new OptionSetValue(Subject);
+            addReferralRequest.msemr_ReferralRequestNumber = ReferralRequestNumber;
+            addReferralRequest.msemr_RequesterAgent = new OptionSetValue(RequestAgent);
+            addReferralRequest.msemr_OccurrenceType = new OptionSetValue(OccurrenceType);
+            addReferralRequest.msemr_InitiatingEncounter = new EntityReference(HealthCDM.msemr_encounter.EntityLogicalName, Guid.Parse((EncounterId)));
+            addReferralRequest.msemr_AppointmentEMR = new EntityReference(HealthCDM.msemr_appointmentemr.EntityLogicalName, Guid.Parse((AppointmentId)));
 
             try
             {
-                referralrequestId = _serviceProxy.Create(addReferrralRequest);
+                referralrequestId = _serviceProxy.Create(addReferralRequest);
 
                 if (referralrequestId != Guid.Empty)
                 {
@@ -295,9 +370,5 @@ namespace CDM.HealthAccelerator.DataModel
             return referralrequestId;
         }
 
-        public static void ExportToJson(string filename, List<Profile> profiles)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

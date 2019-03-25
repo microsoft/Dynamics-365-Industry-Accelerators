@@ -33,6 +33,10 @@ namespace CDM.HealthAccelerator.DataModel
         private int subjectType;
         private DateTime procedureDateTime;
         private string procedureId;
+        private string identifier;
+        private bool notDone;
+        private string encounterId;
+        private string locationId;
 
         public Procedure()
         {
@@ -123,15 +127,70 @@ namespace CDM.HealthAccelerator.DataModel
             }
         }
 
+        public string Identifier
+        {
+            get
+            {
+                return identifier;
+            }
+
+            set
+            {
+                identifier = value;
+            }
+        }
+
+        public bool NotDone
+        {
+            get
+            {
+                return notDone;
+            }
+
+            set
+            {
+                notDone = value;
+            }
+        }
+
+        public string EncounterId
+        {
+            get
+            {
+                return encounterId;
+            }
+
+            set
+            {
+                encounterId = value;
+            }
+        }
+
+        public string LocationId
+        {
+            get
+            {
+                return locationId;
+            }
+
+            set
+            {
+                locationId = value;
+            }
+        }
+
         public override void InitializeEntity()
         {
-            Description = SampleDataCache.Procedures[SampleDataCache.RandomContactGenerator.Next(0, SampleDataCache.Procedures.Count - 1)];
+            Description = SampleDataCache.Procedures[SampleDataCache.SelectRandomItem.Next(0, SampleDataCache.Procedures.Count - 1)];
             Status = HealthCDMEnums.RandomEnumInt<HealthCDMEnums.Procedure_Status>();
             SubjectType = (int)HealthCDMEnums.Procedure_Subjecttype.Patient;
 
-            SampleDataCache.RandomDateTime rdt = new SampleDataCache.RandomDateTime(2017, 1, 1, (DateTime.Today.AddDays(90)));
+            SampleDataCache.GenerateRandomDateTime rdt = new SampleDataCache.GenerateRandomDateTime(2017, 1, 1, (DateTime.Today.AddDays(90)));
 
             ProcedureDateTime = rdt.Next();
+            identifier = GenerateRandomNumber(8);
+
+            NotDone = int.Parse(GenerateRandomNumber(1)) > 5 ? true : false;
         }
 
         public override Guid WriteToCDS(string cdsUrl, string cdsUserName, string cdsPassword)
@@ -176,32 +235,7 @@ namespace CDM.HealthAccelerator.DataModel
                     //enable using proxy types
                     _serviceProxy.EnableProxyTypes();
 
-                    HealthCDM.msemr_procedure addProcedure = new HealthCDM.msemr_procedure();
-
-                    addProcedure.msemr_Patient = new EntityReference(HealthCDM.Contact.EntityLogicalName, Guid.Parse((PatientId)));
-                    addProcedure.msemr_Status = new OptionSetValue(Status);
-                    addProcedure.msemr_DateTime = ProcedureDateTime;
-                    addProcedure.msemr_SubjectType = new OptionSetValue(SubjectType);
-                    addProcedure.msemr_description = Description;
-                   
-                    try
-                    {
-                        patientProcedureId = _serviceProxy.Create(addProcedure);
-
-                        if (patientProcedureId != Guid.Empty)
-                        {
-                            ProcedureId = patientProcedureId.ToString();
-                            Console.WriteLine("Created Patient Procedure [" + ProcedureId + "] for Patient [" + PatientId + "]");
-                        }
-                        else
-                        {
-                            throw new Exception("ProcedueId == null");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.ToString());
-                    }
+                    patientProcedureId = WriteToCDS(_serviceProxy);
                 }
             }
             catch (Exception ex)
@@ -223,6 +257,10 @@ namespace CDM.HealthAccelerator.DataModel
             addProcedure.msemr_DateTime = ProcedureDateTime;
             addProcedure.msemr_SubjectType = new OptionSetValue(SubjectType);
             addProcedure.msemr_description = Description;
+            addProcedure.msemr_ProcedureIdentifier = Identifier;
+            addProcedure.msemr_Location = new EntityReference(HealthCDM.msemr_location.EntityLogicalName, Guid.Parse((LocationId)));
+            addProcedure.msemr_Encounter = new EntityReference(HealthCDM.msemr_encounter.EntityLogicalName, Guid.Parse((EncounterId)));
+
 
             try
             {
