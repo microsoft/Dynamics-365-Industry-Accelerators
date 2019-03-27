@@ -3,7 +3,7 @@
 
 This repository represents the solution for AppSource, to support both side loading and enabling release updates to AppSource, as well as an unmanaged version that matches the managed version release to AppSource. Unmanaged solutions are provided as-is.
 
-To learn more about CDM of the Healthcare Accelerator,click [here](https://docs.microsoft.com/en-us/common-data-model/health-accelerator)
+To learn more about CDM of the Healthcare Accelerator, click [here.](https://docs.microsoft.com/en-us/common-data-model/health-accelerator)
 
 # Requirements
 
@@ -15,13 +15,13 @@ We will be applying updates and releases to the Accelerator solution and sample 
 
 # Contributing
 
-If you want to contribute reach out to us on LinkedIn or sign up in [CDM engage](https://aka.ms/cdmengage)
+If you want to contribute reach out to us on LinkedIn or sign up in [CDM engage.](https://aka.ms/cdmengage)
 
 # Legal Notice
 
 Microsoft and any contributors grant you a license to the Microsoft documentation and other content in this repository under the Creative Commons Attribution 4.0 International Public License, see the LICENSE file, and grant you a license to any code in the repository under the MIT License, see the LICENSE-CODE file.
 
-Microsoft, Windows, Microsoft Azure and/or other Microsoft products and services referenced in the documentation may be either trademarks or registered trademarks of Microsoft in the United States and/or other countries. The licenses for this project do not grant you rights to use any Microsoft names, logos, or trademarks. Microsoft's general trademark guidelines can be found [here](http://go.microsoft.com/fwlink/?LinkID=254653)
+Microsoft, Windows, Microsoft Azure and/or other Microsoft products and services referenced in the documentation may be either trademarks or registered trademarks of Microsoft in the United States and/or other countries. The licenses for this project do not grant you rights to use any Microsoft names, logos, or trademarks. Microsoft's general trademark guidelines can be found [here.](http://go.microsoft.com/fwlink/?LinkID=254653)
 
 Privacy information can be found at https://privacy.microsoft.com/en-us/
 
