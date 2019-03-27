@@ -1,7 +1,9 @@
 
 # Microsoft Dynamics 365 Health Accelerator 
 
-This repository represents the solution for AppSource, to support both side loading and enabling release updates to AppSource, as well as an unmanaged version that matches the managed version release to AppSource. Unmanaged solutions are provided as-is, 
+This repository represents the solution for AppSource, to support both side loading and enabling release updates to AppSource, as well as an unmanaged version that matches the managed version release to AppSource. Unmanaged solutions are provided as-is.
+
+To learn more about CDM of the Healthcare Accelerator, click here, https://docs.microsoft.com/en-us/common-data-model/health-accelerator
 
 # Requirements
 
