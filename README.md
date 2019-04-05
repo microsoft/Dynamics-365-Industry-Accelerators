@@ -1,3 +1,12 @@
+# We are migrating (Work In-Progress)
+As we are growing and building multiple accelerators, we started the work to separate the current repository "Microsoft/Dynamics-365-Industry-Accelerators" into multiple repositories based on the business verticals. here are the below new Industry accelerator repositories reference.
+
+| Industry Accelerators | Description |
+|-------------|----------------------|
+| [Health Accelerator](https://github.com/Microsoft/Industry-Accelerator-Health) |  Rapidly develop healthcare solutions using FHIR entities such as patient, condition, and care plan. The Microsoft Health Accelerator enables partners and customers to create new use cases and workflows using a FHIR-based data model. Get more details from [Dynamics 365 ISV Success community](https://community.dynamics.com/365/b/dynamics365isvsuccess)|
+| [Nonprofit Accelerator](https://github.com/Microsoft/Industry-Accelerator-Nonprofit) |  Rapidly develop nonprofit fundraising, grant/award and program/results management solutions.The Microsoft Nonprofit Accelerator enables partners and customers to create new integrated use cases and workflows across the funding to outcomes cycle. Get more details from [Dynamics 365 ISV Success community](https://community.dynamics.com/365/b/dynamics365isvsuccess)|
+| [Higher Education Accelerator](https://github.com/Microsoft/Industry-Accelerator-Education) |  Rapidly build solutions for Higher Education using entities such as student, course, and test scores.  Get more details from [Dynamics 365 ISV Success community](https://community.dynamics.com/365/b/dynamics365isvsuccess)|
+
 # Microsoft Dynamics 365 Announces Industry Accelerators
 
 Dynamics 365 announced the Microsoft Power Platform, a connected app platform 
