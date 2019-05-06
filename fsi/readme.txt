@@ -1,15 +1,5 @@
-Author: Michael Gernaey
-Details: Utilities that can be leveraged to load data or export data depending on the utility tool we are providing
+Author: James Galvin
 
-Copyright 
-This document is provided "as-is". Information and views expressed in this document, including URL and other Internet Web site references, may change without notice. You bear the risk of using it. 
+The Microsoft Dynamics 365 Banking Accelerator provides a new Banking data model and samples allowing you to easily build apps, processes, analytics, and gain new insights. The Banking data model extends the Microsoft Common Data Model for loan, mortgage, referrals, branch, collateral, deal, limit, facilities, and more. The model provides a shared and consistent metadata definition for common banking entities allowing customers and ISVs to build on the same data model, this common schema allows for new interoperability and improved processes and insights.
 
-Some examples depicted herein are provided for illustration only and are fictitious. No real association or connection is intended or should be inferred. 
-
-This document does not provide you with any legal rights to any intellectual property in any Microsoft product. You may copy and use this document for your internal, reference purposes.
-
-© 2018 Microsoft Corporation. All rights reserved.
-
-Microsoft, Active Directory, ActiveX, BizTalk, Excel, Great Plains, Internet Explorer, JScript, Microsoft Dynamics, MSN, Outlook, PivotTable, PivotChart, Visual Basic, Visual Studio, Windows, Windows Live, Windows Server, and Windows Vista are trademarks of the Microsoft group of companies. 
-
-All other trademarks are property of their respective owners.
+If you are interested in participating in the private preview of the Banking Accelerator, a sign up is available at https://aka.ms/CDMEngage. Weâ€™re looking for both feedback and active collaboration as we evolve the current version of the banking model.
