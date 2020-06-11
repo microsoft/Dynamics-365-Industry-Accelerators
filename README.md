@@ -11,6 +11,12 @@ We have separated this repository "Microsoft/Dynamics-365-Industry-Accelerators"
 | [Media and Communications Accelerator](https://github.com/Microsoft/Industry-Accelerator-Media) |  Rapidly develop solutions around event and venue management, sports management, ticketing and advertising sales, media sponsorships, and various guest interactions such as event registrations and the tracking of loyalty programs. Get more details from [Dynamics 365 ISV Success community](https://community.dynamics.com/365/b/dynamics365isvsuccess)|
 | [Nonprofit Accelerator](https://github.com/Microsoft/Industry-Accelerator-Nonprofit) |  Rapidly develop nonprofit fundraising, grant management, and programmatic measurement solutions. The Microsoft Nonprofit Accelerator is set of capabilities and standards to help drive greater impact. Get more details from Dynamics 365 ISV Success community [Dynamics 365 ISV Success community](https://community.dynamics.com/365/b/dynamics365isvsuccess/posts/dynamics-365-nonprofit-accelerator-iati-interoperability-alignment-membership-volunteer-and-project-management-integration-with-the-microsoft-nonprofit-common-data-model)|
 
+## Engage
+
+Connect with experts and peers, read blog articles, and find local events within the Industry Accelerator Community. 
+
+Join the [Industry Accelerator conversation](https://community.dynamics.com/365/industry-accelerators/).
+
 # Microsoft Dynamics 365 Industry Accelerators
 
 Dynamics 365 announced the Microsoft Power Platform, a connected app platform 
